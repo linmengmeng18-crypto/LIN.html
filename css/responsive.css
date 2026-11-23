@@ -1,0 +1,116 @@
+/* ==========================================================================
+   쿠팡 배송기사 이탈 예측과 리텐션 정책 - 반응형 스타일시트
+   PC, 태블릿, 모바일 지원
+   ========================================================================== */
+
+@media (max-width: 1100px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
+  .grid-2 {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 868px) {
+  :root {
+    --nav-height: 64px;
+  }
+
+  .nav-toggle {
+    display: flex;
+  }
+
+  .nav-menu {
+    position: fixed;
+    top: var(--nav-height);
+    left: 0;
+    right: 0;
+    background: rgba(7, 18, 43, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px 24px 30px;
+    gap: 10px;
+    border-bottom: 1px solid var(--panel-border);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+    transform: translateY(-150%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+  }
+
+  .nav-menu.open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nav-link {
+    padding: 12px 18px;
+    font-size: 1rem;
+  }
+
+  .nav-link.highlight-btn {
+    text-align: center;
+    justify-content: center;
+    margin-top: 6px;
+  }
+
+  .brand-title {
+    font-size: 0.95rem;
+  }
+
+  .brand-meta {
+    display: none;
+  }
+
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-section {
+    padding: 40px 0 30px !important;
+  }
+
+  .hero-title {
+    font-size: 2rem !important;
+  }
+
+  .card {
+    padding: 20px 16px;
+  }
+
+  .section-title {
+    font-size: 1.7rem;
+  }
+}
+
+@media (max-width: 540px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .kpi-value {
+    font-size: 2.2rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-buttons .btn {
+    width: 100%;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}

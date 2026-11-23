@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>쿠팡 배송기사 이탈 예측과 리텐션 정책 | 최종 결론 및 기대 효과</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    /* Ending Presentation Card Styles */
+    .ending-card {
+      background: linear-gradient(135deg, rgba(7, 18, 43, 0.95) 0%, rgba(13, 31, 69, 0.95) 100%);
+      border: 2px solid var(--cyan);
+      border-radius: var(--radius-lg);
+      padding: 60px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.8), 0 0 40px rgba(90, 209, 255, 0.25);
+      margin-top: 50px;
+    }
+
+    .ending-card::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(90, 209, 255, 0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .ending-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 18px;
+      border-radius: var(--radius-full);
+      background: rgba(61, 220, 151, 0.15);
+      border: 1px solid rgba(61, 220, 151, 0.4);
+      color: var(--success);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-bottom: 24px;
+    }
+
+    .ending-title {
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .ending-message {
+      font-size: 1.25rem;
+      color: var(--cyan);
+      font-weight: 600;
+      margin-bottom: 36px;
+    }
+
+    .ending-author-box {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 24px 40px;
+      border-radius: var(--radius-md);
+      background: rgba(4, 10, 24, 0.8);
+      border: 1px solid rgba(90, 209, 255, 0.3);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .ending-author-name {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .ending-author-dept {
+      font-size: 1rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Global Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand">
+        <div class="brand-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <div class="brand-info">
+          <div class="brand-title">쿠팡 배송기사 이탈 예측 <span class="brand-badge">PBL 3</span></div>
+          <div class="brand-meta">한림대학교 경영학과 · 왕린</div>
+        </div>
+      </a>
+
+      <button class="nav-toggle" aria-label="메뉴 열기">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+
+      <nav class="nav-menu">
+        <div class="nav-item"><a href="index.html" class="nav-link">프로젝트 개요</a></div>
+        <div class="nav-item"><a href="analysis.html" class="nav-link">데이터 분석</a></div>
+        <div class="nav-item"><a href="policy.html" class="nav-link">리텐션 정책</a></div>
+        <div class="nav-item"><a href="report.html" class="nav-link">E-book 보고서</a></div>
+        <div class="nav-item"><a href="motion.html" class="nav-link">Motion Effect</a></div>
+        <div class="nav-item"><a href="conclusion.html" class="nav-link highlight-btn active">최종 결론</a></div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container">
+      
+      <!-- Section Header -->
+      <div class="section-header" style="margin-top: 30px;">
+        <div class="section-tag" style="background: rgba(61, 220, 151, 0.15); border-color: rgba(61, 220, 151, 0.4); color: var(--success);">
+          Key Takeaways & Future Directions
+        </div>
+        <h1 class="section-title">최종 결론 및 기대 효과</h1>
+        <p class="section-desc">
+          데이터 실증 검증을 통해 얻은 4대 핵심 결론과 4대 기대 효과, 
+          그리고 분석의 엄밀성을 위한 한계와 향후 검증 방향을 종합합니다.
+        </p>
+      </div>
+
+      <!-- 1. 4대 핵심 결론 카드 그리드 -->
+      <section style="margin-bottom: 40px;">
+        <h2 style="font-size: 1.4rem; color: #fff; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+          <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          프로젝트 4대 핵심 결론 (Core Findings)
+        </h2>
+
+        <div class="grid-2">
+          
+          <!-- Conclusion 1 -->
+          <div class="card">
+            <div class="card-header">
+              <span class="badge badge-risk">결론 1</span>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">가설 검증</span>
+            </div>
+            <h3 style="font-size: 1.2rem; color: #fff; margin-bottom: 10px;">
+              이탈은 '소득'이 아닌 '근무 환경과 소통'의 문제
+            </h3>
+            <p style="font-size: 0.94rem;">
+              재직자와 이탈자 간 월 소득 차이는 <strong>단 0.9%(p = 0.140)</strong>로 통계적으로 유의하지 않았습니다. 
+              반면 <strong>근속 초기, 일평균 근무시간(10.5h 이상), 주당 휴무일(1일 이하), 관리자 면담 부재</strong>가 
+              이탈을 결정짓는 진짜 핵심 요인으로 규명되었습니다.
+            </p>
+          </div>
+
+          <!-- Conclusion 2 -->
+          <div class="card">
+            <div class="card-header">
+              <span class="badge badge-blue">결론 2</span>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">모델 선정</span>
+            </div>
+            <h3 style="font-size: 1.2rem; color: #fff; margin-bottom: 10px;">
+              Logistic Regression의 최적 예측력 및 설명 가능성
+            </h3>
+            <p style="font-size: 0.94rem;">
+              불균형 데이터 평가에서 <strong>Logistic Regression(Test ROC-AUC 0.7830, PR-AUC 0.6264, Recall 0.7152)</strong>이 
+              복잡한 랜덤포레스트와 XGBoost를 능가하며 1위를 차지했습니다. 
+              현장 캠프 관리자에게 이탈 위험 원인을 명확하게 설명할 수 있는 최적의 모델입니다.
+            </p>
+          </div>
+
+          <!-- Conclusion 3 -->
+          <div class="card">
+            <div class="card-header">
+              <span class="badge badge-blue">결론 3</span>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">고위험군 선별</span>
+            </div>
+            <h3 style="font-size: 1.2rem; color: #fff; margin-bottom: 10px;">
+              상위 10% 선별 시 무작위 대비 2.85배 탐지 효율
+            </h3>
+            <p style="font-size: 0.94rem;">
+              전체 3,000명 중 이탈 점수 상위 10%(300명)를 선별하면 <strong>Lift 2.85배(OOF 2.51배)</strong>로 고위험군을 집중 포착합니다. 
+              특히 고위험군의 <strong>81.3%가 위탁 기사</strong>이며, <strong>73.7%가 최근 6개월간 면담 1회 이하</strong>로 
+              소통 취약 계층에 위험이 집중되어 있었습니다.
+            </p>
+          </div>
+
+          <!-- Conclusion 4 -->
+          <div class="card">
+            <div class="card-header">
+              <span class="badge badge-success">결론 4</span>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">정책 최적화</span>
+            </div>
+            <h3 style="font-size: 1.2rem; color: #fff; margin-bottom: 10px;">
+              유일한 양(+)의 ROI : 관리자 1:1 면담 제도화 (+78.8%)
+            </h3>
+            <p style="font-size: 0.94rem;">
+              휴무 확대(-86.7%)나 근무시간 단축(-84.0%)은 막대한 대체 인건비로 적자지만, 
+              <strong>관리자 1:1 면담 제도화(+2회)는 운영비 3천만 원 대비 13.4명을 회피하여 순효과 +2,364만 원, ROI +78.8%</strong>를 달성했습니다.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- 2. 4대 기대 효과 (Expected Benefits) -->
+      <section style="margin-bottom: 40px;">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span class="card-title-icon">
+                <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+              </span>
+              데이터 기반 인력 운영의 4대 기대 효과
+            </h2>
+            <span class="badge badge-success">비즈니스 가치</span>
+          </div>
+
+          <div class="grid-2">
+            
+            <div style="display: flex; gap: 16px;">
+              <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(47, 123, 255, 0.2); border: 1px solid var(--blue); display: flex; align-items: center; justify-content: center; color: var(--cyan); flex-shrink: 0; font-weight: 800; font-size: 1.1rem;">
+                01
+              </div>
+              <div>
+                <h4 style="font-size: 1.05rem; color: #fff; margin-bottom: 6px;">이탈 위험의 사전 조기 감지 체계</h4>
+                <p style="font-size: 0.9rem;">
+                  기사가 퇴사 의사를 밝히기 전에 머신러닝 스코어링을 통해 고위험군을 사전 포착하여 골든타임을 확보합니다.
+                </p>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 16px;">
+              <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(61, 220, 151, 0.2); border: 1px solid var(--success); display: flex; align-items: center; justify-content: center; color: var(--success); flex-shrink: 0; font-weight: 800; font-size: 1.1rem;">
+                02
+              </div>
+              <div>
+                <h4 style="font-size: 1.05rem; color: #fff; margin-bottom: 6px;">한정된 리텐션 예산의 투자 효율 극대화</h4>
+                <p style="font-size: 0.9rem;">
+                  효율이 가장 낮은 전원 소득 인상 대신, 가장 저비용·고효과인 1:1 면담에 자원을 집중하여 즉각적인 흑자 ROI를 달성합니다.
+                </p>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 16px;">
+              <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(90, 209, 255, 0.2); border: 1px solid var(--cyan); display: flex; align-items: center; justify-content: center; color: var(--cyan); flex-shrink: 0; font-weight: 800; font-size: 1.1rem;">
+                03
+              </div>
+              <div>
+                <h4 style="font-size: 1.05rem; color: #fff; margin-bottom: 6px;">사각지대(위탁 기사·신입) 케어 강화</h4>
+                <p style="font-size: 0.9rem;">
+                  소통이 단절되었던 위탁 기사(81.3%)와 신입 온보딩을 체계화하여 조직 몰입도와 현장 만족도를 동반 개선합니다.
+                </p>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 16px;">
+              <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(245, 158, 11, 0.2); border: 1px solid #f59e0b; display: flex; align-items: center; justify-content: center; color: #fbbf24; flex-shrink: 0; font-weight: 800; font-size: 1.1rem;">
+                04
+              </div>
+              <div>
+                <h4 style="font-size: 1.05rem; color: #fff; margin-bottom: 6px;">데이터 기반 인사(HR) 의사결정 체계 확립</h4>
+                <p style="font-size: 0.9rem;">
+                  주관적 직관이나 관행에 의존하던 배송 인력 운영을 실증 데이터와 시뮬레이션 기반의 과학적 거버넌스로 전환합니다.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. 분석의 한계 및 향후 검증 방향 -->
+      <section style="margin-bottom: 40px;">
+        <div class="card" style="border-left: 4px solid var(--risk);">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span class="card-title-icon" style="color: var(--risk);">
+                <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              </span>
+              분석의 한계 및 향후 개선 과제
+            </h2>
+            <span class="badge badge-risk">학술적 엄밀성</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 14px; font-size: 0.92rem; color: var(--text-muted);">
+            <div>
+              <strong style="color: #fff;">1. 인과관계(Causality) 확정의 한계:</strong> 
+              본 연구의 결과는 횡단면 관찰 데이터에 기반한 연관성 분석이며, What-if 시뮬레이션 또한 모델의 반응 함수입니다. 
+              소득-근무강도, 고용형태-면담 간의 다중 연쇄 효과를 완전히 분리하려면 현장 실험이 필수적입니다.
+            </div>
+            <div>
+              <strong style="color: #fff;">2. 가정값 기반의 비용 추정치:</strong> 
+              채용·교육 대체비용(1인 400만 원)과 면담 공수 비용(회당 5만 원)은 파라미터 가정값입니다. 
+              실제 집행 시에는 캠프별 대체 인건비 실측 데이터를 적용해 재산정해야 합니다.
+            </div>
+            <div>
+              <strong style="color: #fff;">3. 소규모 파일럿 및 A/B 테스트 필수:</strong> 
+              면담 강화 정책의 손익분기 효과 실현율은 56% 수준입니다. 즉각적인 전사 확대보다 1~2개 캠프에서 
+              처치군과 대조군을 무작위 배정한 A/B 파일럿을 통해 실효성을 선행 검증해야 합니다.
+            </div>
+            <div>
+              <strong style="color: #fff;">4. 윤리적 거버넌스와 권한 분리:</strong> 
+              고위험군 점수는 기사 평가나 계약 해지 등 불이익 수단으로 악용되어서는 절대 안 되며, 
+              열람 권한을 최소화하고 면담 지원 목적으로만 국한하는 데이터 윤리 규정이 수반되어야 합니다.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Final Presentation Ending Card (요구사항 9 반영) -->
+      <div class="ending-card">
+        <div class="ending-badge">
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          PBL 문제 3 발표 완료
+        </div>
+        
+        <h2 class="ending-title">쿠팡 배송기사 이탈 예측과 리텐션 정책</h2>
+        <div class="ending-message">
+          "소득 인상을 넘어, 데이터로 근무 환경을 살피고 소통으로 지속 가능한 배송망을 만듭니다."
+        </div>
+
+        <div class="ending-author-box">
+          <div class="ending-author-name">발표자 : 왕 린 (WANG LIN)</div>
+          <div class="ending-author-dept">한림대학교 경영학과 · 학번 20238003</div>
+        </div>
+
+        <div style="margin-top: 40px; font-size: 1.6rem; font-weight: 800; color: #fff; letter-spacing: 0.05em;">
+          경청해 주셔서 대단히 감사합니다.
+        </div>
+
+        <div style="margin-top: 28px; display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
+          <a href="index.html" class="btn btn-primary">첫 화면으로 이동</a>
+          <a href="analysis.html" class="btn btn-secondary">데이터 분석 다시보기</a>
+          <a href="report.html" class="btn btn-success">보고서 PDF 다운로드</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <b>쿠팡 배송기사 이탈 예측과 리텐션 정책</b>
+          <span>한림대학교 경영학과 · 학번 20238003 · 발표자 왕린</span>
+        </div>
+        <div class="footer-nav">
+          <a href="index.html">메인</a>
+          <a href="analysis.html">데이터 분석</a>
+          <a href="policy.html">리텐션 정책</a>
+          <a href="report.html">E-book 보고서</a>
+          <a href="motion.html">Motion Effect</a>
+          <a href="conclusion.html">최종 결론</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 WANG LIN (한림대학교 경영학과). All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

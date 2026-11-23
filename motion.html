@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>쿠팡 배송기사 이탈 예측과 리텐션 정책 | 30초 Motion Effect</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .motion-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .player-card {
+      background: #040A18;
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.8), 0 0 30px rgba(47, 123, 255, 0.25);
+      margin-bottom: 30px;
+    }
+
+    .motion-frame-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #000;
+    }
+
+    .motion-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* Scene Timeline Cards */
+    .scene-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .scene-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-md);
+      padding: 18px 14px;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scene-card:hover {
+      background: var(--panel-bg-hover);
+      border-color: var(--cyan);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-cyan);
+    }
+
+    .scene-time-badge {
+      display: inline-block;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--cyan);
+      background: rgba(90, 209, 255, 0.15);
+      border: 1px solid rgba(90, 209, 255, 0.3);
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+
+    .scene-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .scene-script {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 900px) {
+      .scene-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 540px) {
+      .scene-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Global Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand">
+        <div class="brand-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <div class="brand-info">
+          <div class="brand-title">쿠팡 배송기사 이탈 예측 <span class="brand-badge">PBL 3</span></div>
+          <div class="brand-meta">한림대학교 경영학과 · 왕린</div>
+        </div>
+      </a>
+
+      <button class="nav-toggle" aria-label="메뉴 열기">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+
+      <nav class="nav-menu">
+        <div class="nav-item"><a href="index.html" class="nav-link">프로젝트 개요</a></div>
+        <div class="nav-item"><a href="analysis.html" class="nav-link">데이터 분석</a></div>
+        <div class="nav-item"><a href="policy.html" class="nav-link">리텐션 정책</a></div>
+        <div class="nav-item"><a href="report.html" class="nav-link">E-book 보고서</a></div>
+        <div class="nav-item"><a href="motion.html" class="nav-link active">Motion Effect</a></div>
+        <div class="nav-item"><a href="conclusion.html" class="nav-link highlight-btn">최종 결론</a></div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container motion-container">
+      
+      <!-- Section Header -->
+      <div class="section-header" style="margin-top: 30px;">
+        <div class="section-tag">30-Second Kinetic Motion Effect</div>
+        <h1 class="section-title">30초 모션 이펙트: 프로젝트 핵심 브리핑</h1>
+        <p class="section-desc">
+          문제 제기부터 머신러닝 예측, 관리자 1:1 면담 솔루션 및 ROI 기대 효과까지 
+          5개 장면으로 구성된 30초 인터랙티브 모션 영상을 감상하세요.
+        </p>
+      </div>
+
+      <!-- Video Player Card -->
+      <div class="player-card">
+        <div class="motion-frame-wrap" id="playerWrap">
+          <iframe 
+            id="motionFrame"
+            class="motion-frame" 
+            src="motion/P3_Driver_Attrition_MotionEffect.html" 
+            allow="autoplay"
+            title="쿠팡 배송기사 이탈 예측 30초 Motion Effect 플레이어">
+          </iframe>
+        </div>
+        
+        <!-- Player Utility Bar -->
+        <div style="padding: 16px 24px; background: rgba(7, 18, 43, 0.9); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; border-top: 1px solid rgba(90, 209, 255, 0.15);">
+          <div>
+            <div style="font-size: 0.95rem; font-weight: 700; color: #fff;">
+              🎬 30초 Motion Effect 재생기
+            </div>
+            <div style="font-size: 0.78rem; color: var(--text-muted);">
+              영상 내부의 [▶ 재생] 버튼 또는 스페이스바를 눌러 재생할 수 있습니다.
+            </div>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-sm btn-secondary" onclick="reloadFrame()">
+              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              처음부터 다시 로드
+            </button>
+            <button class="btn btn-sm btn-primary" onclick="toggleFullscreen()">
+              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+              전체 화면으로 보기
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5-Scene Timeline Breakdown -->
+      <section class="card" style="margin-top: 30px;">
+        <div class="card-header">
+          <h2 class="card-title">
+            <span class="card-title-icon">
+              <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"/></svg>
+            </span>
+            장면별 타임라인 및 내레이션 스크립트 (총 30초)
+          </h2>
+          <span class="badge badge-blue">Scene 1 ~ 5</span>
+        </div>
+
+        <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 20px;">
+          각 장면 카드를 클릭하면 영상의 해당 시간대로 안내되며, 기획된 장면별 메시지를 확인할 수 있습니다.
+        </p>
+
+        <div class="scene-grid">
+          
+          <!-- Scene 1 -->
+          <div class="scene-card" onclick="seekScene(0)">
+            <span class="scene-time-badge">Scene 1 · 00~06초</span>
+            <div class="scene-title">1. 문제 제기</div>
+            <div class="scene-script">
+              "쿠팡 배송기사 4명 중 1명이 6개월 내 이탈합니다. 흔들리는 배송망, 원인은 과연 무엇일까요?"
+            </div>
+          </div>
+
+          <!-- Scene 2 -->
+          <div class="scene-card" onclick="seekScene(6)">
+            <span class="scene-time-badge">Scene 2 · 06~12초</span>
+            <div class="scene-title">2. 위험 요인</div>
+            <div class="scene-script">
+              "소득 차이는 단 0.9%뿐. 진짜 원인은 장시간 근무, 휴무 부족, 그리고 소통의 부재였습니다."
+            </div>
+          </div>
+
+          <!-- Scene 3 -->
+          <div class="scene-card" onclick="seekScene(12)">
+            <span class="scene-time-badge">Scene 3 · 12~18초</span>
+            <div class="scene-title">3. 이탈 예측</div>
+            <div class="scene-script">
+              "머신러닝 분석을 통해 이탈 위험 상위 10% 고위험군을 2.85배의 정확도로 미리 찾아냅니다."
+            </div>
+          </div>
+
+          <!-- Scene 4 -->
+          <div class="scene-card" onclick="seekScene(18)">
+            <span class="scene-time-badge">Scene 4 · 18~24초</span>
+            <div class="scene-title">4. 해결 방안</div>
+            <div class="scene-script">
+              "고위험군 대상 관리자 1:1 면담 제도화! 현장의 애로사항을 청취하고 맞춤 지원을 연결합니다."
+            </div>
+          </div>
+
+          <!-- Scene 5 -->
+          <div class="scene-card" onclick="seekScene(24)">
+            <span class="scene-time-badge">Scene 5 · 24~30초</span>
+            <div class="scene-title">5. 기대 효과</div>
+            <div class="scene-script">
+              "운영비 대비 ROI +78.8%! 데이터 기반의 인력 운영으로 더 안전하고 단단한 배송망을 만듭니다."
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Bottom Navigation -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px;">
+        <a href="report.html" class="btn btn-secondary">&larr; E-book 보고서 보기</a>
+        <a href="conclusion.html" class="btn btn-success">프로젝트 최종 결론 확인 &rarr;</a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <b>쿠팡 배송기사 이탈 예측과 리텐션 정책</b>
+          <span>한림대학교 경영학과 · 학번 20238003 · 발표자 왕린</span>
+        </div>
+        <div class="footer-nav">
+          <a href="index.html">메인</a>
+          <a href="analysis.html">데이터 분석</a>
+          <a href="policy.html">리텐션 정책</a>
+          <a href="report.html">E-book 보고서</a>
+          <a href="motion.html">Motion Effect</a>
+          <a href="conclusion.html">최종 결론</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 WANG LIN (한림대학교 경영학과). All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    function reloadFrame() {
+      const frame = document.getElementById('motionFrame');
+      frame.src = frame.src;
+    }
+
+    function toggleFullscreen() {
+      const wrap = document.getElementById('playerWrap');
+      if (!document.fullscreenElement) {
+        if (wrap.requestFullscreen) wrap.requestFullscreen();
+        else if (wrap.webkitRequestFullscreen) wrap.webkitRequestFullscreen();
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+
+    function seekScene(seconds) {
+      const frame = document.getElementById('motionFrame');
+      try {
+        if (frame.contentWindow && frame.contentWindow.__player) {
+          frame.contentWindow.__player.seek(seconds);
+        }
+      } catch (e) {
+        console.log('Cross-frame access:', e);
+      }
+    }
+  </script>
+</body>
+</html>

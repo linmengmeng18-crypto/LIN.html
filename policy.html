@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>쿠팡 배송기사 이탈 예측과 리텐션 정책 | 리텐션 정책 및 비용·효과</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- Global Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand">
+        <div class="brand-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <div class="brand-info">
+          <div class="brand-title">쿠팡 배송기사 이탈 예측 <span class="brand-badge">PBL 3</span></div>
+          <div class="brand-meta">한림대학교 경영학과 · 왕린</div>
+        </div>
+      </a>
+
+      <button class="nav-toggle" aria-label="메뉴 열기">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+
+      <nav class="nav-menu">
+        <div class="nav-item"><a href="index.html" class="nav-link">프로젝트 개요</a></div>
+        <div class="nav-item"><a href="analysis.html" class="nav-link">데이터 분석</a></div>
+        <div class="nav-item"><a href="policy.html" class="nav-link active">리텐션 정책</a></div>
+        <div class="nav-item"><a href="report.html" class="nav-link">E-book 보고서</a></div>
+        <div class="nav-item"><a href="motion.html" class="nav-link">Motion Effect</a></div>
+        <div class="nav-item"><a href="conclusion.html" class="nav-link highlight-btn">최종 결론</a></div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container">
+      
+      <!-- Section Header -->
+      <div class="section-header" style="margin-top: 30px;">
+        <div class="section-tag">What-If Simulation & ROI Analysis</div>
+        <h1 class="section-title">리텐션 정책 시뮬레이션 및 비용·효과 분석</h1>
+        <p class="section-desc">
+          머신러닝 모델의 반응을 바탕으로 정책 시나리오별 회피 이탈 인원과 
+          운영 비용, 순효과 및 추정 ROI를 산출하여 실행 우선순위를 도출했습니다.
+        </p>
+      </div>
+
+      <!-- 1. What-if 시뮬레이션 결과 -->
+      <section style="margin-bottom: 40px;">
+        <div class="grid-2">
+          
+          <!-- Left: What-if Chart -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">
+                <span class="card-title-icon">
+                  <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                </span>
+                시나리오별 예측 이탈률 변화
+              </h2>
+              <button class="btn btn-sm btn-secondary" data-zoom-src="assets/charts/fig13_whatif_scenarios.png" data-zoom-caption="그림 13. What-if 정책 시나리오별 평균 예측 이탈률 (원본)">
+                원본 그래프
+              </button>
+            </div>
+            
+            <div class="chart-box" style="height: 320px;">
+              <canvas id="whatIfChart"></canvas>
+            </div>
+
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 14px;">
+              * 모델의 Balanced 가중치 눈금(기준선 44.84%) 기준으로, 정책 적용 시의 상대적 이탈률 감소 폭을 시뮬레이션했습니다.
+            </p>
+          </div>
+
+          <!-- Right: Scenario Table Summary -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">
+                <span class="card-title-icon">
+                  <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                </span>
+                시나리오별 회피 이탈 추정 인원
+              </h2>
+              <span class="badge badge-blue">상위 10% (300명 기준)</span>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table-custom">
+                <thead>
+                  <tr>
+                    <th>시나리오</th>
+                    <th>정책 내용</th>
+                    <th class="text-right">예측 이탈률</th>
+                    <th class="text-right">회피 이탈 추정</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>기준선</strong></td>
+                    <td>현행 유지</td>
+                    <td class="text-right">44.84%</td>
+                    <td class="text-right">-</td>
+                  </tr>
+                  <tr class="highlight-row">
+                    <td><strong>시나리오 C</strong></td>
+                    <td><strong>관리자 면담 +2회</strong></td>
+                    <td class="text-right" style="color: var(--success);">40.37% (-4.47%p)</td>
+                    <td class="text-right" style="color: var(--success); font-weight: 700;">13.4명</td>
+                  </tr>
+                  <tr>
+                    <td><strong>시나리오 B</strong></td>
+                    <td>일평균 근무 -1시간</td>
+                    <td class="text-right">40.04% (-4.80%p)</td>
+                    <td class="text-right">14.4명</td>
+                  </tr>
+                  <tr>
+                    <td><strong>시나리오 A</strong></td>
+                    <td>주당 휴무일 +1일</td>
+                    <td class="text-right">37.87% (-6.96%p)</td>
+                    <td class="text-right">20.9명</td>
+                  </tr>
+                  <tr>
+                    <td><strong>시나리오 D</strong></td>
+                    <td>복합 정책 (A + B + C)</td>
+                    <td class="text-right" style="color: var(--cyan);">24.78% (-20.06%p)</td>
+                    <td class="text-right" style="color: var(--cyan); font-weight: 700;">60.2명</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="callout cyan" style="margin-top: 16px; margin-bottom: 0;">
+              <div class="callout-title">효과와 투자 가치의 분리</div>
+              <p>
+                이탈 감소 인원은 복합 정책(60.2명)과 휴무 확대(20.9명)가 압도적으로 크지만, 
+                <strong>이를 달성하기 위한 인건비 및 대체 인력 투입 비용을 반드시 함께 고려해야</strong> 합니다.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- 2. 비용·효과 및 추정 ROI 분석 (표 11, 12, 그림 14) -->
+      <section style="margin-bottom: 40px;">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">
+                <span class="card-title-icon">
+                  <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </span>
+                정책별 비용·효과 및 추정 ROI (표 12 기준)
+              </h2>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">
+                비용 가정: 기사 1인 이탈 대체비용 400만 원 (채용 250만 + 교육 150만) | 대상: 상위 10% 300명, 6개월 기준
+              </p>
+            </div>
+            <button class="btn btn-sm btn-secondary" data-zoom-src="assets/charts/fig14_policy_roi.png" data-zoom-caption="그림 14. 정책 시나리오별 순효과와 추정 ROI (원본)">
+              ROI 원본 차트
+            </button>
+          </div>
+
+          <!-- ROI Chart & Detailed Table -->
+          <div class="grid-2" style="margin-bottom: 24px;">
+            <div class="chart-box" style="height: 320px;">
+              <canvas id="policyRoiChart"></canvas>
+            </div>
+
+            <!-- Table 12 -->
+            <div class="table-responsive">
+              <table class="table-custom">
+                <thead>
+                  <tr>
+                    <th>시나리오</th>
+                    <th class="text-right">회피 이탈</th>
+                    <th class="text-right">절감액</th>
+                    <th class="text-right">운영 비용</th>
+                    <th class="text-right">순효과</th>
+                    <th class="text-right">추정 ROI</th>
+                    <th>실행 난이도</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="highlight-row">
+                    <td><strong>C. 면담 +2회</strong></td>
+                    <td class="text-right">13.4명</td>
+                    <td class="text-right">5,364만</td>
+                    <td class="text-right">3,000만</td>
+                    <td class="text-right" style="color: var(--success); font-weight: 700;">+2,364만</td>
+                    <td class="text-right" style="color: var(--success); font-weight: 800;">+78.8%</td>
+                    <td><span class="badge badge-success">낮음 (즉시 가능)</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>D. 복합 (A+B+C)</strong></td>
+                    <td class="text-right">60.2명</td>
+                    <td class="text-right">2억 4,080만</td>
+                    <td class="text-right">10억 2,000만</td>
+                    <td class="text-right" style="color: var(--risk);">-7억 7,920만</td>
+                    <td class="text-right" style="color: var(--risk); font-weight: 700;">-76.38%</td>
+                    <td><span class="badge badge-risk">높음 (전면 개편)</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>B. 근무 -1시간</strong></td>
+                    <td class="text-right">14.4명</td>
+                    <td class="text-right">5,760만</td>
+                    <td class="text-right">3억 6,000만</td>
+                    <td class="text-right" style="color: var(--risk);">-3억 240만</td>
+                    <td class="text-right" style="color: var(--risk); font-weight: 700;">-84.00%</td>
+                    <td><span class="badge badge-neutral">중간 (물량 조정)</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>A. 휴무 +1일</strong></td>
+                    <td class="text-right">20.9명</td>
+                    <td class="text-right">8,350만</td>
+                    <td class="text-right">6억 3,000만</td>
+                    <td class="text-right" style="color: var(--risk);">-5억 4,650만</td>
+                    <td class="text-right" style="color: var(--risk); font-weight: 700;">-86.74%</td>
+                    <td><span class="badge badge-neutral">중상 (대체 인력)</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Crucial Caution Note -->
+          <div class="callout risk" style="margin-bottom: 0;">
+            <div class="callout-title">
+              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              필수 안내: 가정값 기반 추정치 및 A/B 테스트 필요성
+            </div>
+            <p>
+              본 웹사이트에 제시된 비용·절감액 및 ROI 수치는 <strong>보고서의 파라미터 가정값(대체비용 400만 원, 면담 1회 5만 원 등)을 이용한 6개월 추정치</strong>입니다. 
+              이는 실제 현장 집행 결과나 확정적 인과효과가 아니므로, 
+              <strong>반드시 소규모 캠프 파일럿 및 A/B 테스트를 거쳐 실측 데이터를 바탕으로 재검증</strong>해야 합니다.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- 3. 고위험군 6대 세그먼트별 맞춤형 리텐션 정책 (표 14) -->
+      <section style="margin-bottom: 40px;">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">
+                <span class="card-title-icon">
+                  <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                </span>
+                고위험군 6대 세그먼트별 맞춤형 정책 (표 14 기준)
+              </h2>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">
+                고위험군 300명을 획일적으로 다루지 않고, 이탈 유발 요인에 맞춰 차별화된 지원 정책을 적용합니다.
+              </p>
+            </div>
+            <span class="badge badge-blue">정밀 타겟팅</span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table-custom">
+              <thead>
+                <tr>
+                  <th>세그먼트 유형</th>
+                  <th>대상 인원</th>
+                  <th>데이터 진단 지표</th>
+                  <th>맞춤 리텐션 실행 정책</th>
+                  <th>우선순위</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="highlight-row">
+                  <td><strong>1. 면담 공백형</strong></td>
+                  <td><strong>221명</strong></td>
+                  <td>최근 6개월 면담 1회 이하 (이탈률 35.2%)</td>
+                  <td><strong>6개월 면담 +2회 제도화</strong>, 고충 상담 표준 질문지 도입</td>
+                  <td><span class="badge badge-success">최우선 (1순위)</span></td>
+                </tr>
+                <tr>
+                  <td><strong>2. 만족도 저하형</strong></td>
+                  <td>239명</td>
+                  <td>직무 만족도 3점 미만 (이탈률 50.6%)</td>
+                  <td>불만 사유(경로·물량·센터 소통) 분류 후 조치 및 피드백</td>
+                  <td><span class="badge badge-blue">단기 실행</span></td>
+                </tr>
+                <tr>
+                  <td><strong>3. 위탁 접점형</strong></td>
+                  <td>244명</td>
+                  <td>위탁 기사 면담 1.06회 vs 직고용 2.99회</td>
+                  <td>위탁 기사 전용 지원 창구 및 캠프 소통 채널 신설</td>
+                  <td><span class="badge badge-blue">단기 실행</span></td>
+                </tr>
+                <tr>
+                  <td><strong>4. 신입 초기형</strong></td>
+                  <td>99명</td>
+                  <td>근속 1~3개월 신입 (이탈률 36.6%)</td>
+                  <td><strong>입사 30·60·90일 온보딩 체크인</strong> 및 선배 멘토 배정</td>
+                  <td><span class="badge badge-neutral">중기 과제</span></td>
+                </tr>
+                <tr>
+                  <td><strong>5. 장시간 근무형</strong></td>
+                  <td>164명</td>
+                  <td>일평균 10.5시간 이상 근무 (이탈률 36.8%)</td>
+                  <td>물량·권역 재배분, AI 동적 라우팅을 통한 경로 최적화</td>
+                  <td><span class="badge badge-neutral">구조 개선</span></td>
+                </tr>
+                <tr>
+                  <td><strong>6. 휴무 부족형</strong></td>
+                  <td>146명</td>
+                  <td>주당 휴무 1일 이하 (이탈률 37.4%)</td>
+                  <td>휴무 로테이션 소규모 시범, 인근 캠프 지원 인력 연계</td>
+                  <td><span class="badge badge-neutral">중기 검토</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. 12개월 단계별 실행 로드맵 (표 15) -->
+      <section style="margin-bottom: 20px;">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span class="card-title-icon">
+                <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              </span>
+              12개월 정책 실행 로드맵 및 성과 점검 체계 (표 15, 16)
+            </h2>
+            <span class="badge badge-blue">단계별 접근</span>
+          </div>
+
+          <div class="grid-2">
+            
+            <div class="card" style="background: rgba(7, 18, 43, 0.7); padding: 20px;">
+              <h3 style="font-size: 1.05rem; color: var(--cyan); margin-bottom: 12px;">📅 단계별 추진 일정</h3>
+              <ul style="display: flex; flex-direction: column; gap: 14px; font-size: 0.92rem;">
+                <li style="border-left: 3px solid var(--blue); padding-left: 12px;">
+                  <strong style="color: #fff;">0단계 : 사전 준비 (0~1개월)</strong><br>
+                  데이터 거버넌스 가이드라인 확립, 면담 표준 질문지 작성, 위탁 계약 검토
+                </li>
+                <li style="border-left: 3px solid var(--success); padding-left: 12px;">
+                  <strong style="color: #fff;">1단계 : 면담 파일럿 (1~3개월)</strong><br>
+                  고위험군 300명 대상 월 1회 1:1 면담 파일럿 시작, 선행지표(이행률) 측정
+                </li>
+                <li style="border-left: 3px solid var(--cyan); padding-left: 12px;">
+                  <strong style="color: #fff;">2단계 : 관찰 및 비용 실측 (3~7개월)</strong><br>
+                  6개월 이탈률 추적 관찰, 근무시간·휴무 소규모 시범 및 대체 비용 실측
+                </li>
+                <li style="border-left: 3px solid #f59e0b; padding-left: 12px;">
+                  <strong style="color: #fff;">3단계 : A/B 평가 및 전사 확대 (7~12개월)</strong><br>
+                  손익분기 달성 평가 후 전 캠프 확대 여부 결정, AI 라우팅 고도화
+                </li>
+              </ul>
+            </div>
+
+            <div class="card" style="background: rgba(7, 18, 43, 0.7); padding: 20px;">
+              <h3 style="font-size: 1.05rem; color: var(--cyan); margin-bottom: 12px;">🎯 핵심 관리 KPI 지표 (표 16)</h3>
+              <div class="table-responsive">
+                <table class="table-custom">
+                  <thead>
+                    <tr>
+                      <th>구분</th>
+                      <th>관리 KPI</th>
+                      <th>현재 기준선</th>
+                      <th>목표치</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>후행</strong></td>
+                      <td>고위험군 6개월 이탈률</td>
+                      <td>약 69% (OOF)</td>
+                      <td style="color: var(--success); font-weight: 700;">2.5%p 이상 감소</td>
+                    </tr>
+                    <tr>
+                      <td><strong>후행</strong></td>
+                      <td>입사 3개월 내 이탈률</td>
+                      <td>36.6%</td>
+                      <td>하락 추세 전환</td>
+                    </tr>
+                    <tr>
+                      <td><strong>선행</strong></td>
+                      <td>고위험군 면담 이행률</td>
+                      <td>평균 0.94회</td>
+                      <td style="color: var(--success); font-weight: 700;">90% 이상 이행</td>
+                    </tr>
+                    <tr>
+                      <td><strong>선행</strong></td>
+                      <td>고위험군 직무 만족도</td>
+                      <td>2.50점</td>
+                      <td>3.0점 이상 향상</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Bottom Navigation -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px;">
+        <a href="analysis.html" class="btn btn-secondary">&larr; 데이터 분석 결과 보기</a>
+        <a href="report.html" class="btn btn-primary">다음 단계: E-book 보고서 열람 &rarr;</a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <b>쿠팡 배송기사 이탈 예측과 리텐션 정책</b>
+          <span>한림대학교 경영학과 · 학번 20238003 · 발표자 왕린</span>
+        </div>
+        <div class="footer-nav">
+          <a href="index.html">메인</a>
+          <a href="analysis.html">데이터 분석</a>
+          <a href="policy.html">리텐션 정책</a>
+          <a href="report.html">E-book 보고서</a>
+          <a href="motion.html">Motion Effect</a>
+          <a href="conclusion.html">최종 결론</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 WANG LIN (한림대학교 경영학과). All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/charts.js"></script>
+</body>
+</html>

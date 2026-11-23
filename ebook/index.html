@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Digital E-book Flipbook Library</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+<style>
+:root{--navy:#17365D;--blue:#2F6DB3;--gray:#F3F5F8;--ink:#263238;--line:#DCE2EA}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.6 Pretendard,Inter,"Noto Sans SC","Noto Sans KR","Malgun Gothic","PingFang SC",system-ui,sans-serif;color:var(--ink);background:#fff}
+button,input,textarea{font:inherit}
+header{display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;padding:8px 24px;min-height:60px;border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:20}
+.logo{font:700 18px Georgia,"Noto Serif KR","Noto Serif SC",serif;color:var(--navy);display:flex;align-items:center;gap:10px;margin-right:auto}
+.logo i{width:20px;height:26px;background:var(--navy);border-radius:2px 5px 5px 2px;box-shadow:inset 4px 0 0 rgba(255,255,255,.3)}
+nav button,.lang button{background:none;border:0;padding:6px 12px;color:var(--ink);cursor:pointer;border-radius:6px}
+nav button.on,.lang button.on{color:var(--navy);font-weight:700;background:var(--gray)}
+.btn{background:var(--navy);color:#fff;border:1px solid var(--navy);border-radius:8px;height:40px;padding:0 18px;cursor:pointer;font-weight:600}
+.btn:hover,.btn.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.alt{background:#fff;color:var(--navy)}
+.btn.alt:hover{background:var(--gray);color:var(--navy);border-color:var(--navy)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+main{max-width:1080px;margin:0 auto;padding:36px 20px 64px}
+.view{display:none}.view.on{display:block}
+.hero{text-align:center}
+h1{font:700 clamp(28px,5vw,44px)/1.2 Georgia,"Noto Serif KR","Noto Serif SC",serif;color:var(--navy);margin:12px 0 6px}
+.sub{font-size:17px;color:#51606b;margin:0 0 28px}
+h2{font:700 21px Georgia,"Noto Serif KR","Noto Serif SC",serif;color:var(--navy);margin:48px 0 16px}
+.drop{border:2px dashed #9fb3cc;background:var(--gray);border-radius:12px;padding:40px 20px;text-align:center;max-width:640px;margin:0 auto}
+.drop.over{border-color:var(--blue);background:#e8f0fa}
+.drop p{margin:0 0 16px;color:#51606b}
+.note{max-width:640px;margin:12px auto 0;font-size:13px;color:#667}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:20px}
+.card{border:1px solid var(--line);border-radius:10px;padding:12px;background:#fff}
+.card img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:4px;background:var(--gray);display:block;margin-bottom:10px}
+.card b{display:block;color:var(--navy);line-height:1.35}.card span{font-size:13px;color:#667}
+.row2{display:flex;gap:8px;margin-top:12px}.row2 .btn{height:36px;padding:0 14px;flex:1}
+.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px}
+.feat div{border-left:3px solid var(--navy);padding:2px 0 2px 14px}.feat b{display:block;color:var(--navy)}
+.two{display:grid;grid-template-columns:240px 1fr;gap:32px;max-width:760px}
+#cv{width:100%;height:auto;border:1px solid var(--line);background:var(--gray);display:block}
+.f label{font-weight:600;color:var(--navy)}
+.f input,.f textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 12px;margin:4px 0 14px}
+.mut{color:#667;font-size:13px}
+#reader{position:fixed;inset:0;z-index:30;background:#e6ebf1;display:none;flex-direction:column}
+#reader.on{display:flex}
+.bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 12px;background:#fff;border-bottom:1px solid var(--line)}
+.bar .btn{height:34px;padding:0 11px;font-size:14px}
+.bar input{width:56px;height:34px;border:1px solid var(--line);border-radius:6px;text-align:center}
+#rt{font-weight:700;color:var(--navy);margin-right:auto;max-width:30ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rb{display:flex;flex:1;min-height:0;position:relative}
+#stage{flex:1;overflow:auto}
+#zw{margin:0 auto}#zi{transform-origin:0 0}
+.pg{background:#fff;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
+.pg canvas{width:100%;height:100%;display:block}
+#side{width:270px;background:#fff;border-left:1px solid var(--line);overflow:auto;padding:12px;display:none}
+#side.on{display:block}
+#side input{width:100%;height:36px;border:1px solid var(--line);border-radius:6px;padding:0 10px;margin-bottom:8px}
+.row{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:8px 4px;cursor:pointer;color:var(--ink);white-space:pre-wrap}
+.row:hover{background:var(--gray)}
+.tg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.th{background:none;border:1px solid var(--line);padding:4px;cursor:pointer;border-radius:4px}
+.th canvas{width:100%;display:block;background:var(--gray)}.th span{font-size:12px;color:#667}
+dialog{border:1px solid var(--line);border-radius:12px;padding:20px;max-width:340px}
+dialog::backdrop{background:rgba(23,54,93,.35)}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 18px;border-radius:8px;z-index:60;max-width:90vw;display:none}
+#toast.err{background:#9b1c1c}
+@media(max-width:700px){header{padding:8px 14px}.two{grid-template-columns:1fr}#side{position:absolute;right:0;top:0;bottom:0;width:80%;z-index:5;box-shadow:-4px 0 12px rgba(0,0,0,.15)}#rt{display:none}}
+@media print{header,.bar,#side,main,#toast{display:none!important}#reader{position:static;background:#fff}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><i></i>E-book Library</div>
+  <nav><button data-v="home" data-i="nav_home"></button><button data-v="shelf" data-i="nav_shelf"></button></nav>
+  <div class="lang"><button data-l="ko">KR</button><button data-l="zh">中文</button><button data-l="en">EN</button></div>
+</header>
+
+<main>
+  <section id="home" class="view on">
+    <div class="hero">
+      <h1 data-i="h1"></h1><p class="sub" data-i="sub"></p>
+      <div class="drop" id="dz"><p data-i="drop"></p><button class="btn" id="pk" data-i="pick"></button></div>
+      <p class="note" data-i="note"></p>
+    </div>
+    <h2 data-i="feat"></h2><div class="grid" id="sm"></div>
+    <h2 data-i="feats"></h2>
+    <div class="feat">
+      <div><b data-i="f1"></b><span data-i="f1d"></span></div>
+      <div><b data-i="f2"></b><span data-i="f2d"></span></div>
+      <div><b data-i="f3"></b><span data-i="f3d"></span></div>
+    </div>
+  </section>
+
+  <section id="setup" class="view">
+    <h2 style="margin-top:0" data-i="setup"></h2>
+    <div class="two">
+      <div><canvas id="cv"></canvas><p class="mut" data-i="coverNote"></p></div>
+      <div class="f">
+        <p class="mut" id="sinfo"></p>
+        <label for="ttl" data-i="title"></label><input id="ttl" maxlength="120">
+        <label for="aut" data-i="author"></label><input id="aut" maxlength="80">
+        <label for="dsc" data-i="desc"></label><textarea id="dsc" rows="4" maxlength="500"></textarea>
+        <div class="row2" style="max-width:360px"><button class="btn alt" id="cn" data-i="cancel"></button><button class="btn" id="mkb" data-i="make" disabled></button></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="shelf" class="view">
+    <h2 style="margin-top:0" data-i="nav_shelf"></h2>
+    <p id="empty" class="mut" data-i="empty"></p>
+    <div class="grid" id="sg"></div>
+  </section>
+</main>
+
+<section id="reader">
+  <div class="bar">
+    <button class="btn alt" id="bk" data-i="back"></button><span id="rt"></span>
+    <button class="btn" id="pv" data-i="prev"></button>
+    <input id="pi" type="number" min="1" aria-label="page"><span id="pn" class="mut"></span>
+    <button class="btn" id="nx" data-i="next"></button>
+    <button class="btn alt" id="zo">−</button><button class="btn alt" id="zf">100%</button><button class="btn alt" id="zi2">+</button>
+    <button class="btn alt" data-t="th" data-i="thumbs"></button>
+    <button class="btn alt" data-t="toc" data-i="toc"></button>
+    <button class="btn alt" data-t="se" data-i="search"></button>
+    <button class="btn alt" data-t="mk" data-i="marks"></button>
+    <button class="btn alt" id="bm" data-i="mark"></button>
+    <button class="btn alt" id="fs" data-i="full"></button>
+    <button class="btn alt" id="dl" data-i="dl"></button>
+    <button class="btn alt" id="pr" data-i="print"></button>
+  </div>
+  <div class="rb"><div id="stage"></div><aside id="side"></aside></div>
+</section>
+
+<input type="file" id="fi" accept="application/pdf,.pdf" hidden>
+<dialog id="dlg"><form method="dialog"><p id="dm"></p><div class="row2"><button class="btn alt" value="0" data-i="cancel"></button><button class="btn" value="1" data-i="del"></button></div></form></dialog>
+<div id="toast" role="status"></div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const E=(t,c,x,f)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;if(f)e.onclick=f;return e};
+// ---------- i18n: [en, ko, zh] ----------
+const D={
+nav_home:['Home','홈','首页'],nav_shelf:['My Books','내 책장','我的书架'],
+h1:['Digital E-book Library','디지털 E-book 라이브러리','数字电子书图书馆'],
+sub:['Upload your PDF and start reading','PDF를 올리고 바로 읽어 보세요','上传 PDF，立即开始阅读'],
+drop:['Drag & drop a PDF here','PDF를 여기에 끌어다 놓으세요','将 PDF 拖拽到此处'],
+pick:['Select PDF file','PDF 파일 선택','选择 PDF 文件'],
+note:['There is no fixed size limit, but very large PDFs depend on browser memory and device performance and may load slowly or fail.','고정 용량 제한은 없지만, 대용량 PDF는 브라우저 메모리와 기기 성능에 따라 느리거나 실패할 수 있습니다.','不设固定大小上限，但超大 PDF 受浏览器内存和设备性能影响，可能加载缓慢或失败。'],
+feat:['Featured e-books','예시 전자책','示例电子书'],feats:['Main features','주요 기능','主要功能'],
+f1:['3D flipbook','3D 플립북','3D 翻页'],f1d:['Two-page spreads with a page-turn animation.','양면 펼침과 페이지 넘김 애니메이션.','双页并排与翻页动画。'],
+f2:['Local library','로컬 책장','本地书架'],f2d:['Books stay in this browser (IndexedDB), on this device only.','책은 이 기기의 이 브라우저(IndexedDB)에만 저장됩니다.','书籍仅保存在本设备的本浏览器（IndexedDB）。'],
+f3:['Reading tools','읽기 도구','阅读工具'],f3d:['Zoom, search, contents, bookmarks, thumbnails.','확대, 검색, 목차, 북마크, 썸네일.','缩放、搜索、目录、书签、缩略图。'],
+setup:['Book details','도서 정보','书籍信息'],coverNote:['The cover is the first page of the PDF.','표지는 PDF 첫 페이지를 사용합니다.','封面使用 PDF 首页。'],
+title:['Title (required)','도서명(필수)','书名（必填）'],author:['Author','저자','作者'],desc:['Description','소개','简介'],
+make:['Generate e-book','전자책 생성','生成电子书'],cancel:['Cancel','취소','取消'],pages:['pages','페이지','页'],
+loading:['Reading PDF…','PDF 읽는 중…','正在读取 PDF…'],sampleTag:['Sample book','예시 도서','示例书'],
+open:['Open','열기','打开'],del:['Delete','삭제','删除'],
+confirm:['Delete this book from this browser?','이 도서를 이 브라우저에서 삭제할까요?','从本浏览器删除这本书？'],
+empty:['No saved books yet. Upload a PDF to start.','저장된 도서가 없습니다. PDF를 업로드해 보세요.','还没有保存的书籍，请先上传 PDF。'],
+last:['Last read: page','마지막 읽은 페이지:','上次读到：第'],
+prev:['Previous','이전','上一页'],next:['Next','다음','下一页'],full:['Full screen','전체 화면','全屏'],
+thumbs:['Thumbnails','썸네일','缩略图'],toc:['Contents','목차','目录'],search:['Search','검색','搜索'],
+marks:['Bookmarks','북마크','书签'],mark:['Bookmark page','북마크 추가','添加书签'],
+dl:['Download PDF','PDF 다운로드','下载 PDF'],print:['Print','인쇄','打印'],back:['My Books','내 책장','我的书架'],
+notoc:['This PDF has no table of contents.','이 PDF에는 목차가 없습니다.','此 PDF 没有目录。'],
+nores:['No matches. Scanned PDFs without a text layer cannot be searched.','검색 결과가 없습니다. 텍스트 레이어가 없는 스캔본은 검색할 수 없습니다.','无结果。没有文字层的扫描件无法搜索。'],
+searching:['Searching…','검색 중…','搜索中…'],nomarks:['No bookmarks yet.','북마크가 없습니다.','暂无书签。'],
+errtype:['Only PDF files are supported.','PDF 파일만 지원합니다.','仅支持 PDF 文件。'],
+errpdf:['Cannot read this PDF. It may be damaged or password-protected.','이 PDF를 읽을 수 없습니다. 손상되었거나 암호가 걸려 있을 수 있습니다.','无法读取此 PDF，文件可能已损坏或有密码保护。'],
+errsave:['Could not save to this browser (storage full or blocked). You can still read it now.','브라우저에 저장하지 못했습니다(공간 부족 또는 차단). 지금은 읽을 수 있습니다.','无法保存到浏览器（空间不足或被禁用），仍可立即阅读。'],
+saved:['Saved to My Books.','내 책장에 저장했습니다.','已保存到我的书架。'],
+big:['Large file: loading may be slow on this device.','대용량 파일: 이 기기에서 느릴 수 있습니다.','文件较大，在此设备上可能较慢。'],
+nodl:['Sample books have no PDF file to download.','예시 도서에는 다운로드할 PDF가 없습니다.','示例书没有可下载的 PDF。'],
+nofull:['Full screen is not available here.','전체 화면을 사용할 수 없습니다.','此处无法使用全屏。'],
+needt:['Enter a title.','도서명을 입력하세요.','请输入书名。'],
+lib:['Reader libraries failed to load. Check your internet connection.','라이브러리를 불러오지 못했습니다. 인터넷 연결을 확인하세요.','组件加载失败，请检查网络连接。']
+};
+let L='en';try{L=localStorage.getItem('fl')||(/^ko/.test(navigator.language)?'ko':/^zh/.test(navigator.language)?'zh':'en')}catch(e){}
+const I=()=>({en:0,ko:1,zh:2})[L],t=k=>D[k][I()];
+let S={},U=null,tm;
+function toast(m,err){const e=$('#toast');e.textContent=m;e.className=err?'err':'';e.style.display='block';clearTimeout(tm);tm=setTimeout(()=>e.style.display='none',4000)}
+const ask=m=>new Promise(ok=>{const d=$('#dlg');$('#dm').textContent=m;d.returnValue='0';d.onclose=()=>ok(d.returnValue=='1');d.showModal()});
+const fmt=b=>b>1048576?(b/1048576).toFixed(1)+' MB':Math.max(1,Math.round(b/1024))+' KB';
+
+// ---------- IndexedDB (books = metadata, files = PDF blobs) ----------
+let db;const idb=()=>db||(db=new Promise((ok,no)=>{const r=indexedDB.open('flipbook',1);r.onupgradeneeded=()=>{r.result.createObjectStore('books',{keyPath:'id'});r.result.createObjectStore('files')};r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)}));
+const tx=async(st,m,f)=>{const d=await idb();return new Promise((ok,no)=>{const x=d.transaction(st,m),r=f(x.objectStore(st));x.oncomplete=()=>ok(r.result);x.onabort=x.onerror=()=>no(x.error)})};
+const put=r=>tx('books','readwrite',s=>s.put(r)),get=id=>tx('books','readonly',s=>s.get(id)),all=()=>tx('books','readonly',s=>s.getAll());
+const persist=()=>{if(S.rec)put(S.rec).catch(()=>{})};
+
+// ---------- documents: PDF and built-in samples share one interface ----------
+async function pdfDoc(buf){
+  const p=await pdfjsLib.getDocument({data:new Uint8Array(buf)}).promise,v=(await p.getPage(1)).getViewport({scale:1});
+  return{n:p.numPages,ratio:v.height/v.width,
+    async render(i,cv,w){const pg=await p.getPage(i+1),s=w/pg.getViewport({scale:1}).width,vp=pg.getViewport({scale:s});cv.width=vp.width;cv.height=vp.height;await pg.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise},
+    async text(i){const c=await(await p.getPage(i+1)).getTextContent();return c.items.map(x=>x.str).join(' ')},
+    async toc(){const o=await p.getOutline(),r=[];const w=async(a,d)=>{for(const it of a){try{let x=it.dest;if(typeof x=='string')x=await p.getDestination(x);if(x)r.push({t:'\u00a0\u00a0'.repeat(d)+it.title,p:await p.getPageIndex(x[0])})}catch(e){}if(it.items&&it.items.length)await w(it.items,d+1)}};if(o)await w(o,0);return r}}
+}
+// original sample content (written for this project)
+const B=[
+{id:'s1',t:['Digital Study Guide','디지털 학습 가이드','数字学习指南'],c:[['Plan your week','List deadlines first, then block study time around classes. A short weekly review keeps goals realistic.'],['Take useful notes','Write questions, not transcripts. Review notes within a day to turn them into lasting memory.'],['Read actively','Preview headings, read in short sessions, and summarize each section in one sentence.'],['Use digital tools','Keep files organized, back up important work, and silence notifications during focus time.']]},
+{id:'s2',t:['Library & Campus Life','도서관과 캠퍼스 생활','图书馆与校园生活'],c:[['The library','Quiet floors, group rooms and research desks make the library the centre of study life.'],['Find sources','Search the catalogue, check the author and date, and keep a list of references as you read.'],['Campus rhythm','Mix classes, clubs and rest. A steady routine matters more than occasional long nights.'],['Ask for help','Librarians, tutors and advisers are there to help; asking early saves time.']]},
+{id:'s3',t:['Introduction to Business','경영학 입문','商业学入门'],c:[['What is business?','A business creates value by offering products or services that customers are willing to pay for.'],['Core functions','Marketing, operations, finance and management work together to deliver and sustain that value.'],['Markets','Supply, demand and competition shape prices and decide which offers succeed.'],['Decisions','Good decisions combine data, clear goals and an honest view of risks.']]}];
+function wrap(x,s,px,py,mw,lh){let l='',y=py;for(const w of s.split(' ')){const u=l?l+' '+w:w;if(x.measureText(u).width>mw&&l){x.fillText(l,px,y);y+=lh;l=w}else l=u}x.fillText(l,px,y)}
+function draw(b,i,cv,w){
+  const h=Math.round(w*1.414),k=w/400,x=cv.getContext('2d'),cover=i==0||i==5,serif='Georgia,"Noto Serif KR","Noto Serif SC",serif';
+  cv.width=w;cv.height=h;x.fillStyle=cover?'#17365D':'#fff';x.fillRect(0,0,w,h);x.textBaseline='top';
+  if(cover){x.fillStyle='#fff';x.textAlign='center';x.font='700 '+30*k+'px '+serif;wrap(x,i?'Digital E-book Library':b.t[I()],w/2,h*.3,w*.76,40*k);x.fillRect(w*.4,h*.74,w*.2,2*k);x.font=14*k+'px sans-serif';x.fillText(t('sampleTag'),w/2,h*.78)}
+  else{const c=b.c[i-1];x.textAlign='left';x.fillStyle='#17365D';x.font='700 '+24*k+'px '+serif;wrap(x,c[0],36*k,60*k,w-72*k,30*k);x.fillStyle='#263238';x.font=15*k+'px sans-serif';wrap(x,c[1],36*k,120*k,w-72*k,24*k);x.fillStyle='#889';x.textAlign='center';x.font=12*k+'px sans-serif';x.fillText(i,w/2,h-36*k)}
+}
+const sampleDoc=b=>({n:6,ratio:1.414,render:async(i,cv,w)=>draw(b,i,cv,w),text:async i=>i>0&&i<5?b.c[i-1].join('. '):'',toc:async()=>b.c.map((c,j)=>({t:c[0],p:j+1}))});
+
+// ---------- views ----------
+function show(v){
+  ['home','setup','shelf'].forEach(x=>$('#'+x).classList.toggle('on',x==v));
+  $('#reader').classList.toggle('on',v=='reader');$('main').hidden=v=='reader';
+  $$('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v==v));
+  if(v=='shelf')shelf();scrollTo(0,0)
+}
+function renderSamples(){
+  const g=$('#sm');g.replaceChildren();
+  B.forEach(b=>{const cv=E('canvas');draw(b,0,cv,300);const im=E('img');im.src=cv.toDataURL();im.alt='';
+    const c=E('div','card');c.append(im,E('b','',b.t[I()]),E('span','',t('sampleTag')),(()=>{const r=E('div','row2');r.append(E('button','btn',t('open'),()=>openSample(b)));return r})());g.append(c)})
+}
+async function shelf(){
+  const g=$('#sg');let a=[];try{a=(await all()).filter(r=>!r.sample).sort((x,y)=>y.added-x.added)}catch(e){}
+  g.replaceChildren();$('#empty').hidden=a.length>0;
+  a.forEach(r=>{const c=E('div','card'),im=E('img');im.src=r.cover;im.alt='';
+    const row=E('div','row2');row.append(E('button','btn',t('open'),()=>openSaved(r.id)),E('button','btn alt',t('del'),async()=>{if(await ask(t('confirm'))){try{await tx('books','readwrite',s=>s.delete(r.id));await tx('files','readwrite',s=>s.delete(r.id))}catch(e){}shelf()}}));
+    c.append(im,E('b','',r.title),E('span','',(r.author?r.author+' · ':'')+r.n+' '+t('pages')),E('br'),E('span','',t('last')+' '+(r.last+1)+(L=='zh'?' 页':'')),row);g.append(c)})
+}
+function lang(l){
+  L=l;try{localStorage.setItem('fl',l)}catch(e){}
+  document.documentElement.lang=l;$$('[data-i]').forEach(e=>e.textContent=t(e.dataset.i));
+  $$('.lang button').forEach(b=>b.classList.toggle('on',b.dataset.l==l));
+  renderSamples();shelf();
+  if(S.rec){$('#rt').textContent=S.b?S.b.t[I()]:S.rec.title;if(S.tab)TABS[S.tab]()}
+  if(U)$('#sinfo').textContent=U.info
+}
+
+// ---------- upload & setup ----------
+async function pick(f){
+  if(!f)return;
+  if(f.type!='application/pdf'&&!/\.pdf$/i.test(f.name))return toast(t('errtype'),1);
+  if(!window.pdfjsLib)return toast(t('lib'),1);
+  U=null;show('setup');$('#sinfo').textContent=t('loading');$('#mkb').disabled=true;
+  try{
+    const doc=await pdfDoc(await f.arrayBuffer());await doc.render(0,$('#cv'),420);
+    U={f,doc,info:f.name+' · '+fmt(f.size)+' · '+doc.n+' '+t('pages')+((f.size>1e8||doc.n>500)?' · '+t('big'):'')};
+    $('#sinfo').textContent=U.info;$('#ttl').value=f.name.replace(/\.pdf$/i,'');$('#aut').value=$('#dsc').value='';$('#mkb').disabled=false
+  }catch(e){show('home');toast(t('errpdf'),1)}
+}
+async function make(){
+  const ttl=$('#ttl').value.trim();if(!ttl){$('#ttl').focus();return toast(t('needt'),1)}
+  $('#mkb').disabled=true;
+  const th=document.createElement('canvas');await U.doc.render(0,th,260);
+  const rec={id:'b'+Date.now(),title:ttl,author:$('#aut').value.trim(),desc:$('#dsc').value.trim(),n:U.doc.n,size:U.f.size,cover:th.toDataURL('image/jpeg',.8),last:0,marks:[],added:Date.now()};
+  try{await tx('files','readwrite',s=>s.put(U.f,rec.id));await put(rec);toast(t('saved'))}catch(e){toast(t('errsave'),1)}
+  openBook(rec,U.doc,U.f,null)
+}
+async function openSaved(id){
+  try{const rec=await get(id),blob=await tx('files','readonly',s=>s.get(id));openBook(rec,await pdfDoc(await blob.arrayBuffer()),blob,null)}catch(e){toast(t('errpdf'),1)}
+}
+async function openSample(b){
+  const rec=(await get(b.id).catch(()=>0))||{id:b.id,sample:1,last:0,marks:[]};rec.title=b.t[0];openBook(rec,sampleDoc(b),null,b)
+}
+
+// ---------- reader ----------
+async function ens(c){for(let i=Math.max(0,c-2);i<=Math.min(S.doc.n-1,c+3);i++){if(S.done.has(i))continue;S.done.add(i);try{await S.doc.render(i,S.pgs[i].firstChild,innerWidth<700?500:800)}catch(e){S.done.delete(i)}}}
+function openBook(rec,doc,blob,b){
+  if(!window.St)return toast(t('lib'),1);
+  closeBook();S={rec,doc,blob,b,z:1,tab:0,done:new Set(),cache:{},sq:0};
+  rec.marks=rec.marks||[];
+  show('reader');$('#rt').textContent=b?b.t[I()]:rec.title;$('#side').classList.remove('on');
+  $('#stage').innerHTML='<div id="zw"><div id="zi"><div id="book"></div></div></div>';
+  const bk=$('#book'),n=doc.n,pw=500;
+  S.pgs=[];for(let i=0;i<n;i++){const d=E('div','pg');if(i==0||i==n-1)d.dataset.density='hard';d.append(E('canvas'));bk.append(d);S.pgs.push(d)}
+  const pf=S.pf=new St.PageFlip(bk,{width:pw,height:Math.round(pw*doc.ratio),size:'stretch',minWidth:200,maxWidth:1000,minHeight:200,maxHeight:1800,showCover:true,maxShadowOpacity:.5,mobileScrollSupport:false});
+  pf.loadFromHTML(S.pgs);pf.on('flip',upd);setZ(1);
+  const start=Math.min(rec.last||0,n-1);if(start>0)pf.turnToPage(start);
+  upd()
+}
+function closeBook(){if(S.pf){try{S.pf.destroy()}catch(e){}}$('#stage').innerHTML='';if(document.fullscreenElement)document.exitFullscreen();S={}}
+function upd(){
+  const c=S.pf.getCurrentPageIndex();S.cur=c;$('#pi').value=c+1;$('#pi').max=S.doc.n;$('#pn').textContent='/ '+S.doc.n;
+  $('#bm').classList.toggle('on',S.rec.marks.includes(c));S.rec.last=c;persist();ens(c)
+}
+const go=p=>{S.pf.turnToPage(p);setTimeout(upd,60)};
+function setZ(z){
+  S.z=Math.min(2.5,Math.max(.6,z));const w=$('#zw'),i=$('#zi');
+  w.style.width=w.style.height=S.z*100+'%';i.style.width=i.style.height=100/S.z+'%';i.style.transform='scale('+S.z+')';$('#zf').textContent=Math.round(S.z*100)+'%'
+}
+function mark(){const m=S.rec.marks,i=m.indexOf(S.cur);i<0?m.push(S.cur):m.splice(i,1);persist();upd();if(S.tab=='mk')TABS.mk()}
+function dl(){
+  if(!S.blob)return toast(t('nodl'));
+  const a=E('a');a.href=URL.createObjectURL(S.blob);a.download=(S.rec.title||'book')+'.pdf';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),5000)
+}
+const TABS={
+  th(){const s=$('#side'),g=E('div','tg'),io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){io.unobserve(e.target);S.doc.render(+e.target.dataset.p,e.target.firstChild,120).catch(()=>{})}}),{root:s});
+    for(let i=0;i<S.doc.n;i++){const b=E('button','th',null,()=>go(i)),c=E('canvas');c.width=120;c.height=Math.round(120*S.doc.ratio);b.dataset.p=i;b.append(c,E('span','',i+1));g.append(b)}
+    s.replaceChildren(g);g.querySelectorAll('.th').forEach(b=>io.observe(b))},
+  async toc(){const a=await S.doc.toc();$('#side').replaceChildren(...(a.length?a.map(x=>E('button','row',x.t,()=>go(x.p))):[E('p','mut',t('notoc'))]))},
+  se(){const s=$('#side'),i=E('input'),r=E('div');i.placeholder=t('search');s.replaceChildren(i,r);i.focus();
+    i.onkeydown=async e=>{if(e.key!='Enter')return;const q=i.value.trim().toLowerCase();if(!q)return;const id=++S.sq;let k=0;r.replaceChildren(E('p','mut',t('searching')));
+      const out=[];for(let p=0;p<S.doc.n&&S.sq==id&&k<60;p++){const tx=S.cache[p]??=await S.doc.text(p),j=tx.toLowerCase().indexOf(q);if(j>=0){k++;out.push(E('button','row','p.'+(p+1)+'  …'+tx.slice(Math.max(0,j-25),j+q.length+35)+'…',()=>go(p)));r.replaceChildren(...out)}}
+      if(S.sq==id&&!k)r.replaceChildren(E('p','mut',t('nores')))}},
+  mk(){const m=[...S.rec.marks].sort((a,b)=>a-b);$('#side').replaceChildren(...(m.length?m.map(p=>E('button','row','p.'+(p+1),()=>go(p))):[E('p','mut',t('nomarks'))]))}
+};
+function tab(k){const s=$('#side');if(S.tab==k){s.classList.remove('on');S.tab=0;return}S.tab=k;s.classList.add('on');TABS[k]()}
+
+// ---------- events ----------
+$$('[data-l]').forEach(b=>b.onclick=()=>lang(b.dataset.l));
+$$('nav button').forEach(b=>b.onclick=()=>{if(S.pf)closeBook();show(b.dataset.v)});
+$('#pk').onclick=()=>$('#fi').click();
+$('#fi').onchange=e=>{pick(e.target.files[0]);e.target.value=''};
+const dz=$('#dz');
+['dragenter','dragover'].forEach(n=>dz.addEventListener(n,e=>{e.preventDefault();dz.classList.add('over')}));
+['dragleave','drop'].forEach(n=>dz.addEventListener(n,e=>{e.preventDefault();dz.classList.remove('over')}));
+dz.addEventListener('drop',e=>pick(e.dataTransfer.files[0]));
+$('#cn').onclick=()=>{U=null;show('home')};$('#mkb').onclick=make;
+$('#bk').onclick=()=>{closeBook();show('shelf')};
+$('#pv').onclick=()=>S.pf.flipPrev();$('#nx').onclick=()=>S.pf.flipNext();
+$('#pi').onchange=()=>go(Math.min(S.doc.n,Math.max(1,+$('#pi').value||1))-1);
+$('#zo').onclick=()=>setZ(S.z-.2);$('#zi2').onclick=()=>setZ(S.z+.2);$('#zf').onclick=()=>setZ(1);
+$$('[data-t]').forEach(b=>b.onclick=()=>tab(b.dataset.t));
+$('#bm').onclick=mark;$('#dl').onclick=dl;$('#pr').onclick=()=>print();
+$('#fs').onclick=()=>{const r=$('#reader');(document.fullscreenElement?document.exitFullscreen():(r.requestFullscreen?r.requestFullscreen():Promise.reject())).catch(()=>toast(t('nofull'),1))};
+document.addEventListener('keydown',e=>{if(!S.pf||/INPUT|TEXTAREA/.test(e.target.tagName))return;if(e.key=='ArrowLeft')S.pf.flipPrev();if(e.key=='ArrowRight')S.pf.flipNext()});
+
+lang(L);show('home');
+</script>
+</body>
+</html>

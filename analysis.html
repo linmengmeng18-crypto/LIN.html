@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>쿠팡 배송기사 이탈 예측과 리텐션 정책 | 데이터 및 머신러닝 분석</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- Global Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand">
+        <div class="brand-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <div class="brand-info">
+          <div class="brand-title">쿠팡 배송기사 이탈 예측 <span class="brand-badge">PBL 3</span></div>
+          <div class="brand-meta">한림대학교 경영학과 · 왕린</div>
+        </div>
+      </a>
+
+      <button class="nav-toggle" aria-label="메뉴 열기">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+
+      <nav class="nav-menu">
+        <div class="nav-item"><a href="index.html" class="nav-link">프로젝트 개요</a></div>
+        <div class="nav-item"><a href="analysis.html" class="nav-link active">데이터 분석</a></div>
+        <div class="nav-item"><a href="policy.html" class="nav-link">리텐션 정책</a></div>
+        <div class="nav-item"><a href="report.html" class="nav-link">E-book 보고서</a></div>
+        <div class="nav-item"><a href="motion.html" class="nav-link">Motion Effect</a></div>
+        <div class="nav-item"><a href="conclusion.html" class="nav-link highlight-btn">최종 결론</a></div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container">
+      
+      <!-- Section Header -->
+      <div class="section-header" style="margin-top: 30px;">
+        <div class="section-tag">Machine Learning & Exploratory Data Analysis</div>
+        <h1 class="section-title">데이터 탐색 및 머신러닝 예측 모델링</h1>
+        <p class="section-desc">
+          3,000명의 배송기사 운용 데이터와 8단계 분석 파이프라인을 거쳐 
+          가설을 검증하고, 최적의 예측 모델과 핵심 이탈 요인을 규명했습니다.
+        </p>
+      </div>
+
+      <!-- 1. 데이터 개요 & 가설 검정 -->
+      <section style="margin-bottom: 40px;">
+        <div class="grid-2">
+          
+          <!-- Data Profile Card -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">
+                <span class="card-title-icon">
+                  <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2 1.5 3 3.5 3h9c2 0 3.5-1 3.5-3V7c0-2-1.5-3-3.5-3h-9C5.5 4 4 5 4 7zm0 5h16M9 4v16"/></svg>
+                </span>
+                데이터 개요 및 품질 점검
+              </h2>
+              <span class="badge badge-blue">N = 3,000</span>
+            </div>
+            
+            <p style="margin-bottom: 16px;">
+              과제에서 제공된 가상 배송기사 운영 데이터(<code>P3_driver_attrition.csv</code>)를 기반으로 누수 없이 정밀하게 검증했습니다.
+            </p>
+
+            <div class="table-responsive">
+              <table class="table-custom">
+                <tbody>
+                  <tr>
+                    <td><strong>데이터셋 규모</strong></td>
+                    <td>3,000행 × 17개 변수 (식별자 1, 목표 1, 수치형 13, 범주형 2)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>결측치 및 중복</strong></td>
+                    <td style="color: var(--success); font-weight: 600;">0건 (완전 무결점 데이터)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>목표 변수 (이탈)</strong></td>
+                    <td>6개월 내 이탈 <strong>826명 (27.53%)</strong> / 재직 2,174명 (72.47%)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>범주형 변수</strong></td>
+                    <td>고용 형태 (위탁 54.8%, 직고용 45.2%), 권역 (수도권, 영남, 호남 등 5개)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>데이터 분할</strong></td>
+                    <td>Train 2,400명 (5-Fold CV) / Test 600명 (층화추출 분할)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Hypothesis Test Card -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">
+                <span class="card-title-icon">
+                  <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                </span>
+                인사팀 가설 실증 검정 결과
+              </h2>
+              <span class="badge badge-risk">가설 기각</span>
+            </div>
+
+            <div class="callout risk" style="margin-top: 0;">
+              <div class="callout-title">가설: "월 소득이 낮을수록 이탈률이 높을 것이다" &rarr; 기각</div>
+              <p>
+                재직자(평균 406.3만 원) vs 이탈자(평균 402.7만 원)의 월 소득 차이는 <strong>단 0.9%(3.6만 원)</strong>에 불과하며, 
+                독립표본 t-검정 및 Mann-Whitney U 검정 결과 통계적으로 유의하지 않았습니다 
+                (<em>t = 1.48, p = 0.140, Cohen's d = -0.062</em>).
+              </p>
+            </div>
+
+            <div class="callout success">
+              <div class="callout-title">채택된 핵심 요인: 근무 환경과 관리 소통</div>
+              <p>
+                근속 개월(<em>d = -0.718, p &lt; 0.001</em>), 일평균 근무시간(<em>d = +0.648, p &lt; 0.001</em>), 
+                직무 만족도(<em>d = -0.589, p &lt; 0.001</em>), 관리자 면담 횟수(<em>d = -0.407, p &lt; 0.001</em>)는 
+                모두 통계적으로 극히 유의한 차이를 보였습니다.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- 2. 머신러닝 4대 모델 성능 비교 -->
+      <section style="margin-bottom: 40px;">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">
+                <span class="card-title-icon">
+                  <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                </span>
+                머신러닝 모델 비교 및 최종 모델 선정 (표 4 기준)
+              </h2>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">
+                불균형 데이터(이탈률 27.53%)의 특성을 고려하여 Accuracy가 아닌 <strong>PR-AUC와 Recall(재현율)</strong>을 핵심 지표로 평가했습니다.
+              </p>
+            </div>
+            <button class="btn btn-sm btn-secondary" data-zoom-src="assets/charts/fig07_roc_pr_curves.png" data-zoom-caption="그림 7. 모델별 ROC 곡선 및 Precision-Recall 곡선 (원본)">
+              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/></svg>
+              ROC/PR 원본 곡선 보기
+            </button>
+          </div>
+
+          <!-- Chart.js Canvas -->
+          <div class="chart-box" style="height: 340px; margin-bottom: 24px;">
+            <canvas id="modelComparisonChart"></canvas>
+          </div>
+
+          <!-- Detailed Table 4 -->
+          <div class="table-responsive">
+            <table class="table-custom">
+              <thead>
+                <tr>
+                  <th>모델명</th>
+                  <th class="text-right">CV PR-AUC</th>
+                  <th class="text-right">CV ROC-AUC</th>
+                  <th class="text-right">Test ROC-AUC</th>
+                  <th class="text-right">Test PR-AUC</th>
+                  <th class="text-right">Recall (재현율)</th>
+                  <th class="text-right">Precision (정밀도)</th>
+                  <th class="text-right">F1-Score</th>
+                  <th>선정 여부</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="highlight-row">
+                  <td><strong>Logistic Regression</strong></td>
+                  <td class="text-right">0.5600</td>
+                  <td class="text-right">0.7613</td>
+                  <td class="text-right" style="color: var(--cyan); font-weight: 700;">0.7830</td>
+                  <td class="text-right" style="color: var(--cyan); font-weight: 700;">0.6264</td>
+                  <td class="text-right" style="color: var(--success); font-weight: 700;">0.7152</td>
+                  <td class="text-right">0.4876</td>
+                  <td class="text-right">0.5799</td>
+                  <td><span class="badge badge-success">최종 선정 (1위)</span></td>
+                </tr>
+                <tr>
+                  <td>Random Forest</td>
+                  <td class="text-right">0.5320</td>
+                  <td class="text-right">0.7443</td>
+                  <td class="text-right">0.7703</td>
+                  <td class="text-right">0.6069</td>
+                  <td class="text-right">0.6727</td>
+                  <td class="text-right">0.4868</td>
+                  <td class="text-right">0.5649</td>
+                  <td><span class="badge badge-neutral">보조 모델</span></td>
+                </tr>
+                <tr>
+                  <td>XGBoost</td>
+                  <td class="text-right">0.5043</td>
+                  <td class="text-right">0.7236</td>
+                  <td class="text-right">0.7626</td>
+                  <td class="text-right">0.5821</td>
+                  <td class="text-right">0.6545</td>
+                  <td class="text-right">0.5023</td>
+                  <td class="text-right">0.5684</td>
+                  <td><span class="badge badge-neutral">미선정</span></td>
+                </tr>
+                <tr>
+                  <td>Decision Tree</td>
+                  <td class="text-right">0.4321</td>
+                  <td class="text-right">0.6698</td>
+                  <td class="text-right">0.7341</td>
+                  <td class="text-right">0.5135</td>
+                  <td class="text-right">0.7212</td>
+                  <td class="text-right">0.4595</td>
+                  <td class="text-right">0.5613</td>
+                  <td><span class="badge badge-neutral">미선정</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Model Selection Rationale -->
+          <div class="grid-3" style="margin-top: 24px;">
+            <div class="card" style="background: rgba(7, 18, 43, 0.7); padding: 18px;">
+              <h4 style="font-size: 0.95rem; color: var(--cyan); margin-bottom: 8px;">1. 전 영역 예측력 1위</h4>
+              <p style="font-size: 0.85rem;">
+                Test ROC-AUC 0.7830 및 PR-AUC 0.6264로 4개 알고리즘 중 가장 높은 종합 성능을 기록했습니다.
+              </p>
+            </div>
+            <div class="card" style="background: rgba(7, 18, 43, 0.7); padding: 18px;">
+              <h4 style="font-size: 0.95rem; color: var(--cyan); margin-bottom: 8px;">2. 뛰어난 위험 탐지력</h4>
+              <p style="font-size: 0.85rem;">
+                Recall 0.7152로 Test 세트 실제 이탈자 165명 중 118명을 사전에 포착했습니다 (TN 311, FP 124, FN 47, TP 118).
+              </p>
+            </div>
+            <div class="card" style="background: rgba(7, 18, 43, 0.7); padding: 18px;">
+              <h4 style="font-size: 0.95rem; color: var(--cyan); margin-bottom: 8px;">3. 명확한 현장 설명력</h4>
+              <p style="font-size: 0.85rem;">
+                블랙박스 모델과 달리 회귀 계수와 오즈비(Odds Ratio)가 직관적이어서 캠프 관리자에게 설득력 있게 전달 가능합니다.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- 3. 핵심 이탈 요인 Top 10 (Permutation & SHAP) -->
+      <section style="margin-bottom: 40px;">
+        <div class="grid-2">
+          
+          <!-- Left: Feature Importance Bar Chart -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <span class="card-title-icon">
+                  <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+                </span>
+                변수 중요도 Top 10 (Permutation)
+              </h3>
+              <button class="btn btn-sm btn-secondary" data-zoom-src="assets/charts/fig09_permutation_importance.png" data-zoom-caption="그림 9. Permutation Importance Top 10 원본 그래프">
+                원본 보기
+              </button>
+            </div>
+            
+            <div class="chart-box" style="height: 380px;">
+              <canvas id="featureImportanceChart"></canvas>
+            </div>
+            
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 12px;">
+              * 1위~5위(근속, 근무시간, 직무 만족도, 주당 휴무일, 경로 난이도)가 전체 이탈 예측력의 대부분을 견인합니다. 
+              월 소득은 11위(0.0063)로 중요도가 낮았습니다.
+            </p>
+          </div>
+
+          <!-- Right: SHAP Summary & Top 5 Table -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <span class="card-title-icon">
+                  <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                </span>
+                핵심 이탈 요인 Top 5와 영향 방향
+              </h3>
+              <button class="btn btn-sm btn-secondary" data-zoom-src="assets/charts/fig10_shap_summary.png" data-zoom-caption="그림 10. SHAP Summary Plot (Logistic Regression & Random Forest)">
+                SHAP 플롯 보기
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table-custom">
+                <thead>
+                  <tr>
+                    <th>순위</th>
+                    <th>핵심 요인</th>
+                    <th>중요도</th>
+                    <th>영향 방향</th>
+                    <th>정책 시사점</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>1위</strong></td>
+                    <td><strong>근속(개월)</strong></td>
+                    <td>0.0335</td>
+                    <td><span style="color: var(--cyan);">음(-) : 근속 짧을수록 이탈</span></td>
+                    <td>입사 초기 30·60·90일 온보딩 집중</td>
+                  </tr>
+                  <tr>
+                    <td><strong>2위</strong></td>
+                    <td><strong>일평균 근무시간</strong></td>
+                    <td>0.0287</td>
+                    <td><span style="color: var(--risk);">양(+) : 길수록 위험</span></td>
+                    <td>10.5시간 이상 장시간 근무자 물량 조정</td>
+                  </tr>
+                  <tr>
+                    <td><strong>3위</strong></td>
+                    <td><strong>직무 만족도</strong></td>
+                    <td>0.0236</td>
+                    <td><span style="color: var(--cyan);">음(-) : 낮을수록 위험</span></td>
+                    <td>분기별 고충 파악 및 현장 애로 해소</td>
+                  </tr>
+                  <tr>
+                    <td><strong>4위</strong></td>
+                    <td><strong>주당 휴무일</strong></td>
+                    <td>0.0185</td>
+                    <td><span style="color: var(--cyan);">음(-) : 적을수록 위험</span></td>
+                    <td>주 1일 이하 근무자 휴무 로테이션 보장</td>
+                  </tr>
+                  <tr>
+                    <td><strong>5위</strong></td>
+                    <td><strong>경로 난이도</strong></td>
+                    <td>0.0175</td>
+                    <td><span style="color: var(--risk);">양(+) : 높을수록 위험</span></td>
+                    <td>AI 기반 고난도 배송 권역 순환 배정</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="callout cyan" style="margin-top: 18px; margin-bottom: 0;">
+              <div class="callout-title">주의: 변수 중요도 해석 원칙</div>
+              <p>
+                머신러닝 변수 중요도는 모델의 <em>예측 기여도</em>를 나타내며, 엄밀한 인과관계(Causality)를 직접 증명하는 것은 아닙니다. 
+                따라서 현장 적용 시에는 파일럿 테스트를 통한 검증이 반드시 수반되어야 합니다.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- 4. 상위 10% 고위험군 (300명) 심층 분석 -->
+      <section style="margin-bottom: 20px;">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">
+                <span class="card-title-icon">
+                  <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                </span>
+                상위 10% 고위험군(300명) vs 일반 기사(2,700명) 프로파일 분석
+              </h2>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">
+                전체 3,000명 중 이탈 확률 상위 10%(300명)를 선별하면 무작위 대비 <strong>2.85배(OOF 2.51배)의 선별 효율(Lift)</strong>을 달성합니다.
+              </p>
+            </div>
+            <button class="btn btn-sm btn-secondary" data-zoom-src="assets/charts/fig11_risk_distribution.png" data-zoom-caption="그림 11. 전체 배송기사 이탈 위험 점수 분포와 상위 10% 기준선 (원본)">
+              위험도 분포도 보기
+            </button>
+          </div>
+
+          <!-- Comparison Bar Chart & Table Grid -->
+          <div class="grid-2" style="margin-bottom: 24px;">
+            <div class="chart-box" style="height: 320px;">
+              <canvas id="highRiskComparisonChart"></canvas>
+            </div>
+
+            <!-- Table 8 Summary -->
+            <div class="table-responsive">
+              <table class="table-custom">
+                <thead>
+                  <tr>
+                    <th>비교 지표</th>
+                    <th class="text-right" style="color: var(--risk);">고위험군 (300명)</th>
+                    <th class="text-right" style="color: var(--cyan);">일반 기사 (2,700명)</th>
+                    <th class="text-right">격차 / 특성</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>위탁 기사 비중</strong></td>
+                    <td class="text-right" style="color: var(--risk); font-weight: 700;">81.3%</td>
+                    <td class="text-right">51.9%</td>
+                    <td class="text-right">+29.4%p (위탁 집중)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>6개월 면담 1회 이하</strong></td>
+                    <td class="text-right" style="color: var(--risk); font-weight: 700;">73.7%</td>
+                    <td class="text-right">37.9%</td>
+                    <td class="text-right">+35.8%p (소통 단절)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>직무 만족도 평균</strong></td>
+                    <td class="text-right" style="color: var(--risk);">2.50점</td>
+                    <td class="text-right">3.65점</td>
+                    <td class="text-right">-1.15점 (불만 누적)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>일평균 근무시간</strong></td>
+                    <td class="text-right" style="color: var(--risk);">10.42시간</td>
+                    <td class="text-right">9.07시간</td>
+                    <td class="text-right">+1.35시간 장시간</td>
+                  </tr>
+                  <tr>
+                    <td><strong>주당 휴무일 평균</strong></td>
+                    <td class="text-right" style="color: var(--risk);">1.25일</td>
+                    <td class="text-right">1.74일</td>
+                    <td class="text-right">-0.49일 휴식 부족</td>
+                  </tr>
+                  <tr>
+                    <td><strong>평균 근속 개월</strong></td>
+                    <td class="text-right" style="color: var(--risk);">8.1개월</td>
+                    <td class="text-right">17.1개월</td>
+                    <td class="text-right">-9.0개월 (신입 위주)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>월 평균 소득</strong></td>
+                    <td class="text-right">401.2만 원</td>
+                    <td class="text-right">405.8만 원</td>
+                    <td class="text-right">단 1.1% 차이 (유의차 없음)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Ethical & Action Principle -->
+          <div class="callout risk" style="margin-bottom: 0;">
+            <div class="callout-title">
+              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              고위험군 점수의 윤리적 활용 가이드라인
+            </div>
+            <p>
+              본 예측 점수는 배송기사에게 <strong>불이익을 주거나 감시·평가하기 위한 도구가 아닙니다</strong>. 
+              소통이 취약한 위탁 기사와 신입 기사에게 관리자가 먼저 다가가 애로사항을 청취하고, 
+              근무 부담을 덜어주기 위한 <strong>'선제적 지원 및 상담 연결'</strong> 목적에 한정하여 운용되어야 합니다.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Bottom Navigation -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px;">
+        <a href="index.html" class="btn btn-secondary">&larr; 메인 개요로 돌아가기</a>
+        <a href="policy.html" class="btn btn-primary">다음 단계: 리텐션 정책 & ROI 분석 &rarr;</a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <b>쿠팡 배송기사 이탈 예측과 리텐션 정책</b>
+          <span>한림대학교 경영학과 · 학번 20238003 · 발표자 왕린</span>
+        </div>
+        <div class="footer-nav">
+          <a href="index.html">메인</a>
+          <a href="analysis.html">데이터 분석</a>
+          <a href="policy.html">리텐션 정책</a>
+          <a href="report.html">E-book 보고서</a>
+          <a href="motion.html">Motion Effect</a>
+          <a href="conclusion.html">최종 결론</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 WANG LIN (한림대학교 경영학과). All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/charts.js"></script>
+</body>
+</html>
