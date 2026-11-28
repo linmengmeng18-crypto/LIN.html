@@ -8,6 +8,87 @@
   <link rel="stylesheet" href="css/responsive.css">
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Analysis Visual Gallery Cards */
+    .analysis-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .analysis-chart-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: var(--transition);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .analysis-chart-card:hover {
+      border-color: var(--cyan);
+      box-shadow: 0 10px 25px rgba(47, 123, 255, 0.35);
+      transform: translateY(-3px);
+    }
+
+    .analysis-chart-imgwrap {
+      width: 100%;
+      aspect-ratio: 16/10;
+      background: #040916;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .analysis-chart-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      transition: var(--transition);
+      padding: 6px;
+    }
+
+    .analysis-chart-card:hover .analysis-chart-img {
+      transform: scale(1.04);
+    }
+
+    .analysis-chart-info {
+      padding: 14px 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .analysis-chart-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .analysis-chart-caption {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    @media (max-width: 992px) {
+      .analysis-gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 580px) {
+      .analysis-gallery-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -50,6 +131,23 @@
           3,000명의 배송기사 운용 데이터와 8단계 분석 파이프라인을 거쳐 
           가설을 검증하고, 최적의 예측 모델과 핵심 이탈 요인을 규명했습니다.
         </p>
+      </div>
+
+      <!-- 프로젝트 대표 사진 및 분석 개요 카드 -->
+      <div class="card" style="margin-bottom: 24px; padding: 18px 24px; background: rgba(13, 31, 69, 0.85); border-color: rgba(90, 209, 255, 0.3);">
+        <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+          <div class="zoomable-chart-card" data-zoom-src="P3이미지/P3이미지.png" data-zoom-caption="P3 프로젝트 공식 분석 사진 (P3이미지)" style="width: 120px; flex-shrink: 0; border-radius: 8px; overflow: hidden; border: 1px solid var(--cyan); box-shadow: 0 4px 15px rgba(0,0,0,0.4); cursor: pointer;">
+            <img src="P3이미지/P3이미지.png" alt="P3 프로젝트 사진" style="width: 100%; height: auto; display: block;" onerror="this.src='P3이미지.png'">
+            <div class="zoom-hint">확대</div>
+          </div>
+          <div style="flex: 1; min-width: 260px;">
+            <div style="font-size: 0.82rem; color: var(--cyan); font-weight: 700; text-transform: uppercase; margin-bottom: 4px;">P3 Project Dataset & Methodology</div>
+            <h3 style="font-size: 1.15rem; color: #fff; margin-bottom: 6px;">실제 업로드된 P3 데이터 및 8단계 정밀 머신러닝 분석</h3>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0; line-height: 1.5;">
+              3,000명의 배송기사 실제 운영 데이터(결측치 0건, 이탈률 27.53%)를 토대로 독립표본 t-검정, 4개 머신러닝 분류기 5-Fold 교차검증, Permutation & SHAP 변수 중요도를 체계적으로 검증했습니다.
+            </p>
+          </div>
+        </div>
       </div>
 
       <!-- 1. 데이터 개요 & 가설 검정 -->
@@ -134,7 +232,97 @@
         </div>
       </section>
 
-      <!-- 2. 머신러닝 4대 모델 성능 비교 -->
+      <!-- 2. 탐색적 데이터 분석(EDA) 실제 그래프 이미지 갤러리 (신설) -->
+      <section style="margin-bottom: 40px;">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">
+                <span class="card-title-icon">
+                  <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                </span>
+                탐색적 데이터 분석(EDA) 원본 시각화 갤러리
+              </h2>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">
+                보고서 3장에 수록된 실제 분석 그래프 원본입니다. 클릭하여 고해상도로 확대해 보실 수 있습니다.
+              </p>
+            </div>
+            <span class="badge badge-blue">그림 1 ~ 6 수록</span>
+          </div>
+
+          <div class="analysis-gallery-grid">
+            
+            <div class="analysis-chart-card zoomable-chart-card" data-zoom-src="assets/charts/fig01_attrition_dist.png" data-zoom-caption="그림 1. 이탈 여부 분포(좌)와 고용 형태별 이탈률(우)">
+              <div class="analysis-chart-imgwrap">
+                <img src="assets/charts/fig01_attrition_dist.png" alt="그림 1" class="analysis-chart-img">
+                <div class="zoom-hint">확대</div>
+              </div>
+              <div class="analysis-chart-info">
+                <div class="analysis-chart-title">그림 1. 이탈 분포 및 고용 형태별 이탈률</div>
+                <div class="analysis-chart-caption">위탁(31.6%) vs 직고용(22.6%) 간 이탈률 격차</div>
+              </div>
+            </div>
+
+            <div class="analysis-chart-card zoomable-chart-card" data-zoom-src="assets/charts/fig02_tenure_dist.png" data-zoom-caption="그림 2. 근속 개월에 따른 이탈/재직 분포">
+              <div class="analysis-chart-imgwrap">
+                <img src="assets/charts/fig02_tenure_dist.png" alt="그림 2" class="analysis-chart-img">
+                <div class="zoom-hint">확대</div>
+              </div>
+              <div class="analysis-chart-info">
+                <div class="analysis-chart-title">그림 2. 근속 개월별 이탈/재직 분포</div>
+                <div class="analysis-chart-caption">입사 초기(1~6개월)에 급격히 집중되는 이탈 패턴</div>
+              </div>
+            </div>
+
+            <div class="analysis-chart-card zoomable-chart-card" data-zoom-src="assets/charts/fig03_working_conditions.png" data-zoom-caption="그림 3. 근로 조건 구간별 6개월 내 이탈률">
+              <div class="analysis-chart-imgwrap">
+                <img src="assets/charts/fig03_working_conditions.png" alt="그림 3" class="analysis-chart-img">
+                <div class="zoom-hint">확대</div>
+              </div>
+              <div class="analysis-chart-info">
+                <div class="analysis-chart-title">그림 3. 근로 조건 구간별 이탈률</div>
+                <div class="analysis-chart-caption">근무 10.5h 이상(36.8%), 휴무 1일 이하(37.4%) 급증</div>
+              </div>
+            </div>
+
+            <div class="analysis-chart-card zoomable-chart-card" data-zoom-src="assets/charts/fig04_workhours_income.png" data-zoom-caption="그림 4. 재직자 vs 이탈자의 근무시간·휴무일·월 소득 비교">
+              <div class="analysis-chart-imgwrap">
+                <img src="assets/charts/fig04_workhours_income.png" alt="그림 4" class="analysis-chart-img">
+                <div class="zoom-hint">확대</div>
+              </div>
+              <div class="analysis-chart-info">
+                <div class="analysis-chart-title">그림 4. 근무시간·휴무일·소득 상자수염도</div>
+                <div class="analysis-chart-caption">월 소득 분포는 일치하나 근무시간은 확연히 길어짐</div>
+              </div>
+            </div>
+
+            <div class="analysis-chart-card zoomable-chart-card" data-zoom-src="assets/charts/fig05_region_nightshift.png" data-zoom-caption="그림 5. 권역별 이탈률(좌)과 야간 근무 비중 분포(우)">
+              <div class="analysis-chart-imgwrap">
+                <img src="assets/charts/fig05_region_nightshift.png" alt="그림 5" class="analysis-chart-img">
+                <div class="zoom-hint">확대</div>
+              </div>
+              <div class="analysis-chart-info">
+                <div class="analysis-chart-title">그림 5. 권역별 이탈률 & 야간근무 비중</div>
+                <div class="analysis-chart-caption">수도권 및 강원권 이탈률 및 야간 작업 비중 비교</div>
+              </div>
+            </div>
+
+            <div class="analysis-chart-card zoomable-chart-card" data-zoom-src="assets/charts/fig06_correlation_heatmap.png" data-zoom-caption="그림 6. 수치형 변수 간 Spearman 상관 히트맵">
+              <div class="analysis-chart-imgwrap">
+                <img src="assets/charts/fig06_correlation_heatmap.png" alt="그림 6" class="analysis-chart-img">
+                <div class="zoom-hint">확대</div>
+              </div>
+              <div class="analysis-chart-info">
+                <div class="analysis-chart-title">그림 6. Spearman 상관계수 히트맵</div>
+                <div class="analysis-chart-caption">변수 간 다중공선성 및 이탈과의 상관관계 매트릭스</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. 머신러닝 4대 모델 성능 비교 -->
       <section style="margin-bottom: 40px;">
         <div class="card">
           <div class="card-header">
@@ -225,32 +413,33 @@
             </table>
           </div>
 
-          <!-- Model Selection Rationale -->
-          <div class="grid-3" style="margin-top: 24px;">
-            <div class="card" style="background: rgba(7, 18, 43, 0.7); padding: 18px;">
-              <h4 style="font-size: 0.95rem; color: var(--cyan); margin-bottom: 8px;">1. 전 영역 예측력 1위</h4>
-              <p style="font-size: 0.85rem;">
-                Test ROC-AUC 0.7830 및 PR-AUC 0.6264로 4개 알고리즘 중 가장 높은 종합 성능을 기록했습니다.
+          <!-- Model Comparison & Confusion Matrix Cards -->
+          <div class="grid-2" style="margin-top: 24px;">
+            <div class="card zoomable-chart-card" data-zoom-src="assets/charts/fig08_confusion_matrix.png" data-zoom-caption="그림 8. 최종 모델 Logistic Regression 혼동행렬 (TN 311, FP 124, FN 47, TP 118)">
+              <div class="card-header" style="margin-bottom: 10px;">
+                <h4 style="font-size: 0.98rem; color: #fff;">그림 8. 최종 모델 혼동행렬 (Confusion Matrix)</h4>
+                <div class="zoom-hint">확대</div>
+              </div>
+              <img src="assets/charts/fig08_confusion_matrix.png" alt="혼동행렬" style="width: 100%; height: auto; max-height: 220px; object-fit: contain; background: #040916; border-radius: 8px;">
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 8px;">
+                실제 이탈 165명 중 118명을 포착(Recall 71.52%). 고위험군 조기 탐지 목적에 가장 부합합니다.
               </p>
             </div>
-            <div class="card" style="background: rgba(7, 18, 43, 0.7); padding: 18px;">
-              <h4 style="font-size: 0.95rem; color: var(--cyan); margin-bottom: 8px;">2. 뛰어난 위험 탐지력</h4>
-              <p style="font-size: 0.85rem;">
-                Recall 0.7152로 Test 세트 실제 이탈자 165명 중 118명을 사전에 포착했습니다 (TN 311, FP 124, FN 47, TP 118).
-              </p>
-            </div>
-            <div class="card" style="background: rgba(7, 18, 43, 0.7); padding: 18px;">
-              <h4 style="font-size: 0.95rem; color: var(--cyan); margin-bottom: 8px;">3. 명확한 현장 설명력</h4>
-              <p style="font-size: 0.85rem;">
-                블랙박스 모델과 달리 회귀 계수와 오즈비(Odds Ratio)가 직관적이어서 캠프 관리자에게 설득력 있게 전달 가능합니다.
-              </p>
+
+            <div class="card" style="background: rgba(7, 18, 43, 0.7); padding: 20px;">
+              <h4 style="font-size: 1rem; color: var(--cyan); margin-bottom: 12px;">선정 사유 3대 핵심 포인트</h4>
+              <ul style="display: flex; flex-direction: column; gap: 10px; font-size: 0.88rem; color: var(--text-muted);">
+                <li><strong style="color: #fff;">1. 종합 예측력 1위:</strong> Test ROC-AUC 0.7830, PR-AUC 0.6264로 4개 모델 중 최고 성능.</li>
+                <li><strong style="color: #fff;">2. 뛰어난 위험 탐지력:</strong> Recall 0.7152로 실제 이탈자의 71% 이상을 사전에 경보.</li>
+                <li><strong style="color: #fff;">3. 투명한 현장 설명력:</strong> 회귀계수와 SHAP이 일치하여 캠프 관리자에게 납득 가능한 근거 제공.</li>
+              </ul>
             </div>
           </div>
 
         </div>
       </section>
 
-      <!-- 3. 핵심 이탈 요인 Top 10 (Permutation & SHAP) -->
+      <!-- 4. 핵심 이탈 요인 Top 10 (Permutation & SHAP) -->
       <section style="margin-bottom: 40px;">
         <div class="grid-2">
           
@@ -355,7 +544,7 @@
         </div>
       </section>
 
-      <!-- 4. 상위 10% 고위험군 (300명) 심층 분석 -->
+      <!-- 5. 상위 10% 고위험군 (300명) 심층 분석 -->
       <section style="margin-bottom: 20px;">
         <div class="card">
           <div class="card-header">
@@ -370,9 +559,14 @@
                 전체 3,000명 중 이탈 확률 상위 10%(300명)를 선별하면 무작위 대비 <strong>2.85배(OOF 2.51배)의 선별 효율(Lift)</strong>을 달성합니다.
               </p>
             </div>
-            <button class="btn btn-sm btn-secondary" data-zoom-src="assets/charts/fig11_risk_distribution.png" data-zoom-caption="그림 11. 전체 배송기사 이탈 위험 점수 분포와 상위 10% 기준선 (원본)">
-              위험도 분포도 보기
-            </button>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-sm btn-secondary" data-zoom-src="assets/charts/fig11_risk_distribution.png" data-zoom-caption="그림 11. 전체 배송기사 이탈 위험 점수 분포와 상위 10% 기준선">
+                그림 11 원본
+              </button>
+              <button class="btn btn-sm btn-secondary" data-zoom-src="assets/charts/fig12_risk_factors_count.png" data-zoom-caption="그림 12. 위험 신호 개수별 실제 이탈률">
+                그림 12 원본
+              </button>
+            </div>
           </div>
 
           <!-- Comparison Bar Chart & Table Grid -->

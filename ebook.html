@@ -74,13 +74,44 @@ dialog::backdrop{background:rgba(23,54,93,.35)}
 </head>
 <body>
 <header>
-  <div class="logo"><i></i>E-book Library</div>
+  <div class="logo"><i></i>쿠팡 배송기사 이탈예측 E-book</div>
+  <a href="index.html" class="btn alt" style="text-decoration:none; display:inline-flex; align-items:center; height:36px; padding:0 12px; font-size:13px; font-weight:700;">&larr; 메인 화면</a>
+  <a href="report.html" class="btn alt" style="text-decoration:none; display:inline-flex; align-items:center; height:36px; padding:0 12px; font-size:13px; font-weight:700;">📖 보고서 전문 열람</a>
+  <a href="P3_배송기사_이탈예측_최종보고서_수정본.pdf" download="P3_배송기사_이탈예측_최종보고서_수정본.pdf" class="btn" style="text-decoration:none; display:inline-flex; align-items:center; height:36px; padding:0 14px; font-size:13px; font-weight:700; background:#2F6DB3; border-color:#2F6DB3;">⬇️ PDF 다운로드</a>
   <nav><button data-v="home" data-i="nav_home"></button><button data-v="shelf" data-i="nav_shelf"></button></nav>
   <div class="lang"><button data-l="ko">KR</button><button data-l="zh">中文</button><button data-l="en">EN</button></div>
 </header>
 
 <main>
   <section id="home" class="view on">
+    <!-- P3 프로젝트 공식 보고서 강조 카드 -->
+    <div style="background: linear-gradient(135deg, #07122B, #0E2452); border: 2px solid #5AD1FF; border-radius: 12px; padding: 24px; margin-bottom: 30px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap; color: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+      <div style="width: 130px; flex-shrink: 0; border-radius: 8px; overflow: hidden; border: 1px solid #5AD1FF; box-shadow: 0 8px 20px rgba(0,0,0,0.5);">
+        <img src="P3이미지/P3이미지.png" alt="쿠팡 배송기사 이탈 예측 보고서 표지" style="width: 100%; height: auto; display: block;" onerror="this.src='P3이미지.png'">
+      </div>
+      <div style="flex: 1; min-width: 260px;">
+        <div style="display: inline-block; background: rgba(90,209,255,0.2); color: #5AD1FF; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; margin-bottom: 8px;">
+          PBL 문제 3 공식 보고서 (12개 장 · 17개 표 · 14개 그림)
+        </div>
+        <h2 style="margin: 0 0 8px; font-size: 1.35rem; color: #fff; font-family: Pretendard, system-ui, sans-serif;">쿠팡 배송기사 이탈 예측 및 리텐션 정책 최종 보고서</h2>
+        <p style="margin: 0 0 14px; color: #B0C4DE; font-size: 13.5px; line-height: 1.5;">
+          발표자: 왕린 (한림대학교 경영학과 20238003)<br>
+          3,000명 기사 데이터 분석, Logistic Regression 최적 모델(AUC 0.7830), 관리자 면담 강화 ROI(+78.8%) 수록
+        </p>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="btn" onclick="openSample(B[0])" style="background: #5AD1FF; color: #07122B; border-color: #5AD1FF; font-weight: 700;">
+            📖 3D 플립북 바로 읽기
+          </button>
+          <a href="P3_배송기사_이탈예측_최종보고서_수정본.pdf" download="P3_배송기사_이탈예측_최종보고서_수정본.pdf" class="btn alt" style="text-decoration:none; display:inline-flex; align-items:center; background:#fff; color:#07122B;">
+            ⬇️ 원본 PDF 다운로드 (1.53MB)
+          </a>
+          <a href="report.html" class="btn alt" style="text-decoration:none; display:inline-flex; align-items:center; background:rgba(255,255,255,0.15); color:#fff; border-color:rgba(255,255,255,0.3);">
+            📑 웹 텍스트 전문 열람
+          </a>
+        </div>
+      </div>
+    </div>
+
     <div class="hero">
       <h1 data-i="h1"></h1><p class="sub" data-i="sub"></p>
       <div class="drop" id="dz"><p data-i="drop"></p><button class="btn" id="pk" data-i="pick"></button></div>
@@ -202,6 +233,12 @@ async function pdfDoc(buf){
 }
 // original sample content (written for this project)
 const B=[
+{id:'p3_report',t:['Coupang Driver Retention (P3)','쿠팡 배송기사 이탈예측 및 리텐션 정책 (P3 최종 보고서)','Coupang配送员留存预测报告'],c:[
+  ['1. 요약 & 핵심 발견','3,000명 기사 데이터 분석 결과 6개월 이탈률은 27.53%(826명)입니다. 독립표본 t-검정 결과 소득 차이는 0.9%(3.6만 원)로 통계적으로 유의하지 않았으며(p=0.140), 이탈은 소득이 아니라 근속, 일평균 근무시간, 직무 만족도, 주당 휴무일과 관리자 소통에 기인합니다.'],
+  ['2. 머신러닝 예측 모델링','4개 분류 모델(LR, RF, XGB, LGBM) 중 규제화된 로지스틱 회귀가 Test ROC-AUC 0.7830, Recall 0.7152로 1위를 기록했습니다. 상위 10% 고위험군(위험점수 46.1% 이상)의 실제 이탈률은 78.7%(리프트 2.85배)에 달합니다.'],
+  ['3. What-if 시뮬레이션','근무시간 단축, 휴무 확대, 관리자 면담 2회 추가, 복합 시나리오를 시뮬레이션한 결과, 면담 2회 추가 시 예측 이탈률이 44.84%에서 40.37%로 4.47%p 안정적으로 감소(고위험군 13.4명 이탈 회피)했습니다.'],
+  ['4. 리텐션 정책 비용·효과(ROI)','면담 강화는 운영비 3,000만 원 대비 순효과 +2,364만 원으로 추정 ROI +78.8%를 기록하여 유일하게 양(+)의 투자수익률을 달성했습니다. 12개월 우선순위 실행 로드맵을 제언합니다.']
+]},
 {id:'s1',t:['Digital Study Guide','디지털 학습 가이드','数字学习指南'],c:[['Plan your week','List deadlines first, then block study time around classes. A short weekly review keeps goals realistic.'],['Take useful notes','Write questions, not transcripts. Review notes within a day to turn them into lasting memory.'],['Read actively','Preview headings, read in short sessions, and summarize each section in one sentence.'],['Use digital tools','Keep files organized, back up important work, and silence notifications during focus time.']]},
 {id:'s2',t:['Library & Campus Life','도서관과 캠퍼스 생활','图书馆与校园生活'],c:[['The library','Quiet floors, group rooms and research desks make the library the centre of study life.'],['Find sources','Search the catalogue, check the author and date, and keep a list of references as you read.'],['Campus rhythm','Mix classes, clubs and rest. A steady routine matters more than occasional long nights.'],['Ask for help','Librarians, tutors and advisers are there to help; asking early saves time.']]},
 {id:'s3',t:['Introduction to Business','경영학 입문','商业学入门'],c:[['What is business?','A business creates value by offering products or services that customers are willing to pay for.'],['Core functions','Marketing, operations, finance and management work together to deliver and sustain that value.'],['Markets','Supply, demand and competition shape prices and decide which offers succeed.'],['Decisions','Good decisions combine data, clear goals and an honest view of risks.']]}];
@@ -331,7 +368,35 @@ $('#bm').onclick=mark;$('#dl').onclick=dl;$('#pr').onclick=()=>print();
 $('#fs').onclick=()=>{const r=$('#reader');(document.fullscreenElement?document.exitFullscreen():(r.requestFullscreen?r.requestFullscreen():Promise.reject())).catch(()=>toast(t('nofull'),1))};
 document.addEventListener('keydown',e=>{if(!S.pf||/INPUT|TEXTAREA/.test(e.target.tagName))return;if(e.key=='ArrowLeft')S.pf.flipPrev();if(e.key=='ArrowRight')S.pf.flipNext()});
 
-lang(L);show('home');
+async function autoLoadP3Report() {
+  const defaultPdfUrl = 'P3_배송기사_이탈예측_최종보고서_수정본.pdf';
+  try {
+    toast('쿠팡 배송기사 이탈 예측 최종 보고서를 불러오는 중...');
+    const resp = await fetch(defaultPdfUrl);
+    if (!resp.ok) throw new Error('Fetch status: ' + resp.status);
+    const blob = await resp.blob();
+    const doc = await pdfDoc(await blob.arrayBuffer());
+    const rec = {
+      id: 'p3_final_report',
+      title: '쿠팡 배송기사 이탈 예측 및 리텐션 정책 최종 분석 보고서',
+      author: '왕린 (한림대학교 경영학과)',
+      desc: 'PBL 문제 3 — 소득이 아닌 근무 환경, 비용 대비 효과가 큰 정책은 무엇인가',
+      n: doc.n,
+      size: blob.size,
+      cover: 'P3이미지/P3이미지.png',
+      last: 0,
+      marks: [],
+      added: Date.now()
+    };
+    openBook(rec, doc, blob, null);
+  } catch (err) {
+    console.log('Auto-load notice (will show standard view):', err);
+    show('home');
+  }
+}
+
+lang(L);
+autoLoadP3Report();
 </script>
 </body>
 </html>
